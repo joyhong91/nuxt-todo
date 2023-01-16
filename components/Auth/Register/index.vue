@@ -56,7 +56,7 @@ export default {
           email: this.registerData.email,
           password: this.registerData.password
         });
-        this.$router.push("/home");
+        this.$router.push("/todo");
       } catch (err) {
         console.log(err);
         this.registerData.errorAlert = "사용할 수 없는 이메일 입니다. 다시 입력해 주세요."

@@ -6,6 +6,7 @@ require("dotenv").config({path: 'variables.env'});
 
 // routes
 const authRouter = require("./routes/authRouter");
+const todoRouter = require("./routes/todoRouter");
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/api/auth/", authRouter);
+app.use("/", todoRouter);
 
 app.use((error, req, res, next) => {
   console.log(error);
