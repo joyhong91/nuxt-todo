@@ -40,7 +40,7 @@
                   >로그아웃</nuxt-link
                 >
               </li>
-              <li>
+              <li class="nav-item">
                 <nuxt-link
                   class="nav-link"
                   aria-current="page"
