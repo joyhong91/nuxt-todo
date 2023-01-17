@@ -3,14 +3,14 @@
     <p class="error-msg"> {{ this.loginData.errorMsg }}</p>
     <form @submit.prevent="login">
       <div class="mb-3">
-        <label for="email" class="form-label">Email address</label>
+        <label for="email" class="form-label">이메일</label>
         <input type="email" class="form-control" id="email" v-model="loginData.email" aria-describedby="emailHelp" />
       </div>
       <div class="mb-3">
-        <label for="password" class="form-label">Password</label>
+        <label for="password" class="form-label">비밀번호</label>
         <input type="password" v-model="loginData.password" class="form-control" id="password" />
       </div>
-      <button type="submit" class="btn btn-primary w-100">login</button>
+      <button type="submit" class="btn btn-submit">로그인</button>
     </form>
     <nuxt-link to="/auth/register">회원가입</nuxt-link>
   </div>

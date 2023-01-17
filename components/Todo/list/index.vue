@@ -1,5 +1,8 @@
 <template>
     <div>
+        <font-awesome-layers class="fa"> <!-- suffix: true 덕분에 -icon 생략가능(기존: font-awesome-icon-layers) -->
+            <font-awesome-icon icon="check" /> <!-- font-awesome => 위에서 설정한 component 이름 -->
+        </font-awesome-layers>
         <p>{{ getTodoItems.length }}</p>
         <ul>
             <li class="list-item" v-for="todoItem in getTodoItems" v-bind:key="todoItem.id">

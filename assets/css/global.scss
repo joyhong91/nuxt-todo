@@ -13,31 +13,38 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'NanumBarunGothic';
+    font-style: normal;
+    font-weight: 400;
+    src: url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.eot');
+    src: url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.eot?#iefix') format('embedded-opentype'), url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.woff') format('woff'), url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.ttf') format('truetype');
+   }
+
 
 //variables
-$yellow-color: #FDF6A4;
-$orange-color: #E16F53;
-$blue-color: #9DD6F5;
+$dark_navy: #393E46;
+$dark_orange: #DF7861;
+$orange: #ECB390;
+$dark_red: #903749;
+$darkest_red: #53354A;
+$green_dark0: #F3EFE0;
 $white-color: #f3f3f3;
 
-.bg-yellow{
-    background-color: $yellow-color;
+
+
+body {
+    font-family: "NanumBarunGothic" !important;
+    background-color: $white-color !important;
 }
 
-.bg-orange{
-    background-color: $orange-color;
-}
-
-.bg-blue{
-    background-color: $blue-color;
-}
-
+//header
 .navbar-brand {
     font-family: "PyeongChangPeace-Bold";
 }
 
 nav.navbar {
-    background-color: $orange-color;
+    background-color: $dark_navy;
 
     .navbar-brand {
         color: $white-color;
@@ -47,6 +54,23 @@ nav.navbar {
         color: $white-color;
         &.nuxt-link-active{
             text-decoration: underline;
+        }
+    }
+}
+.error-msg {
+    color: $dark_red;
+}
+
+.btn{
+    &.btn-submit {
+        display: block;
+        margin: 0 auto;
+        background-color: $dark_orange;
+        color: $white-color;
+        &:hover {
+            color: $darkest_red;
+            border: 1px solid $dark_orange;
+            
         }
     }
 }
