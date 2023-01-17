@@ -1,8 +1,8 @@
 <template>
   <div>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light">
       <div class="container-fluid">
-        <nuxt-link class="navbar-brand" to="/">작심삼일</nuxt-link>
+        <nuxt-link class="navbar-brand" to="/">습관공작소</nuxt-link>
         <button
           class="navbar-toggler"
           type="button"
@@ -19,34 +19,34 @@
             <template v-if="!isAuthenticated">
               <li class="nav-item">
                 <nuxt-link
-                  class="nav-link active"
+                  class="nav-link"
                   aria-current="page"
                   to="/auth/login"
-                  >Login</nuxt-link
+                  >로그인</nuxt-link
                 >
               </li>
               <li class="nav-item">
                 <nuxt-link
-                  class="nav-link active"
+                  class="nav-link"
                   aria-current="page"
                   to="/auth/register"
-                  >Register</nuxt-link
+                  >회원가입</nuxt-link
                 >
               </li>
             </template>
             <template v-else>
               <li class="nav-item" @click="logout">
-                <nuxt-link class="nav-link active" aria-current="page" to="#"
-                  >Logout</nuxt-link
+                <nuxt-link class="nav-link" aria-current="page" to="#"
+                  >로그아웃</nuxt-link
                 >
               </li>
-              <li>
+              <li class="nav-item">
                 <nuxt-link
-                  class="nav-link active"
+                  class="nav-link"
                   aria-current="page"
                   to="/profile"
                 >
-                  Profile
+                  회원정보
                 </nuxt-link>
               </li>
             </template>
