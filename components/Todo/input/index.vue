@@ -9,7 +9,7 @@
         <date-picker v-model="finishedAt" valueType="format" format="YYYY-MM-DD"
           input-class="form-control sm white datepicker" placeholder="종료일"></date-picker>
       </client-only>
-      <button type="submit" class="btn btn-primary w-100">입력</button>
+      <button type="submit" class="btn btn-submit w-100">입력</button>
     </form>
   </div>
 </template>
