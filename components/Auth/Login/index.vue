@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p> {{ this.loginData.errorAlert }}</p>
+    <p class="error-msg"> {{ this.loginData.errorMsg }}</p>
     <form @submit.prevent="login">
       <div class="mb-3">
         <label for="email" class="form-label">Email address</label>
@@ -23,7 +23,7 @@ export default {
       loginData: {
         email: "test123@test.com",
         password: "test123",
-        errorAlert: null
+        errorMsg: null
       }
     };
   },
@@ -39,7 +39,7 @@ export default {
         this.$router.push("/");
 
       } catch (err) {
-        this.loginData.errorAlert = "아이디 혹은 비밀번호가 잘못 되었습니다.";
+        this.loginData.errorMsg = this.$ERROR().LOGIN;
         console.log(err);
       }
     }

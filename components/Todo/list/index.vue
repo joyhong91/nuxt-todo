@@ -1,8 +1,8 @@
 <template>
     <div>
-        <p>{{ $store.state.todoItems.length }}</p>
+        <p>{{ getTodoItems.length }}</p>
         <ul>
-            <li class="list-item" v-for="todoItem in $store.state.todoItems" v-bind:key="todoItem.id">
+            <li class="list-item" v-for="todoItem in getTodoItems" v-bind:key="todoItem.id">
                 <div class="description">
                     <p> {{ todoItem.title }}</p>
                 </div>
@@ -13,6 +13,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
     async fetch() {
         try {
@@ -26,24 +28,10 @@ export default {
         } catch (err) {
             console.log(err);
         }
-
-        // await this.$store.dispatch('FETCH_TODO_ITEMS');
-        //   try {
-        //     const response = await this.$axios.$get("/getTodosByUserId", {
-        //       fullname: this.registerData.fullname,
-        //       email: this.registerData.email,
-        //       password: this.registerData.password
-        //     });
-        //     // this.$router.push("/");
-        //   } catch (err) {
-        //     console.log(err);
-        //     this.errorMsg = "로딩 에러 ."
-        //   }
     },
-    
-    methods: {
-
-    },
+    computed: {
+        ...mapGetters(['getTodoItems'])
+    }
 
 };
 </script>

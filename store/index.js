@@ -1,5 +1,3 @@
-import { fetchTodosByUserId } from "@/front_api";
-
 export const state = () => ({
   currentUser: {},
   todoItems: []
@@ -13,6 +11,9 @@ export const getters = {
   getUserInfo(state) {
     return state.auth.user;
   },
+  getTodoItems(state) {
+    return state.todoItems;
+  }
   
 };
 
@@ -36,7 +37,6 @@ export const actions = {
   // state.auth.user.id
   LOAD_TODO_ITEMS({ commit }, { todoItems }) {
     console.log("fetch todoITems");
-    console.log(todoItems);
     commit('setTodoItems', todoItems);
   },
   ADD_NEW_ITEM({ commit }, { todoItem }) {
