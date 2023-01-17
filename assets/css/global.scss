@@ -1,0 +1,52 @@
+// fonts
+@font-face {
+    font-family: 'KOTRAHOPE';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2110@1.0/KOTRAHOPE.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'PyeongChangPeace-Bold';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2206-02@1.0/PyeongChangPeace-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+
+
+//variables
+$yellow-color: #FDF6A4;
+$orange-color: #E16F53;
+$blue-color: #9DD6F5;
+$white-color: #f3f3f3;
+
+.bg-yellow{
+    background-color: $yellow-color;
+}
+
+.bg-orange{
+    background-color: $orange-color;
+}
+
+.bg-blue{
+    background-color: $blue-color;
+}
+
+.navbar-brand {
+    font-family: "PyeongChangPeace-Bold";
+}
+
+nav.navbar {
+    background-color: $orange-color;
+
+    .navbar-brand {
+        color: $white-color;
+    }
+
+    .navbar-nav .nav-item > .nav-link{
+        color: $white-color;
+        &.nuxt-link-active{
+            text-decoration: underline;
+        }
+    }
+}
