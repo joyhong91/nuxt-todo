@@ -2,7 +2,7 @@
   <div>
     <form @submit.prevent="addTodo">
       <div class="mb-3">
-        <input type="text" v-model="todoData.title" class="form-control" />
+        <input type="text" v-model="todoData.title" class="form-control"/>
       </div>
       <client-only>
         <date-picker v-model="todoData.deadline" valueType="format" format="YYYY-MM-DD"
@@ -21,27 +21,26 @@ export default {
   data() {
     return {
       todoData: {
-        userId: "",
+        userId: this.$auth.user.id,
         title: "",
+        isDone: false,
         deadline: new Date()
       }
     };
+  },
+  updated() {
+    // alert('updated');
   },
   methods: {
 
     async addTodo() {
       try {
-        const todo = await this.$axios.$post("/addTodo", {
-          userId: this.getUserInfo.id,
-          title: this.todoData.title,
-          isDone: false,
-          deadline: this.todoData.deadline
-        }).then(result => {
-          console.log(result);
-          this.$store.dispatch('ADD_NEW_ITEM', {
-            todoItem: result
-          })
-        });
+        const todo = await this.$axios.$post("/addTodo", this.todoData);
+        this.$store.dispatch('ADD_NEW_ITEM', {
+          todoItem: this.todoData
+        })
+        //빈 입력값일때 예외처리
+        //입력 후에 input form clear
       } catch (err) {
         console.log(err);
       }

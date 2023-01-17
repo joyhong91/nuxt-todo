@@ -1,5 +1,6 @@
 <template>
     <div>
+        <p>{{ $store.state.todoItems.length }}</p>
         <ul>
             <li class="list-item" v-for="todoItem in $store.state.todoItems" v-bind:key="todoItem.id">
                 <div class="description">
@@ -16,15 +17,12 @@ export default {
     async fetch() {
         try {
             const userId = this.$auth.user.id;
-            console.log(userId);
             const response = await this.$axios.$get("/getTodosByUserId",
                 { params: { userId } }).then(result => {
                     this.$store.dispatch('LOAD_TODO_ITEMS', {
                         todoItems: result.todoItems
                     })
                 });
-
-            this.$router.push("/");
         } catch (err) {
             console.log(err);
         }
@@ -42,9 +40,11 @@ export default {
         //     this.errorMsg = "로딩 에러 ."
         //   }
     },
+    
     methods: {
 
-    }
+    },
+
 };
 </script>
 

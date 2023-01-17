@@ -24,7 +24,7 @@ export const mutations = {
     state.todoItems = todoItems;
   },
   setTodoItem(state, todoItem) {
-    state.todoItems.push(todoItem);
+    state.todoItems.unshift(todoItem);
   },
   setCurrentUser(state, user) {
     state.currentUser = user;
