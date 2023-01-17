@@ -1,16 +1,8 @@
 export const state = () => ({
-  fullName: 'fullname test',
-  email: 'email test',
-  password: '1234',
+  currentUser: {},
+  todoItems: []
 })
 
-export const mutations = {
-  setCurrentUser(state, user) {
-    console.log(user);
-    state.email = user.email;
-    state.password = user.password;
-  }
-}
 
 export const getters = {
   isAuthenticated(state) {
@@ -18,6 +10,40 @@ export const getters = {
   },
   getUserInfo(state) {
     return state.auth.user;
+  },
+  getTodoItems(state) {
+    return state.todoItems;
   }
+  
 };
+
+export const mutations = {
+  addTodoItems(state,todoItem) {
+    state.todoItems.push(todoItem);
+  },
+  setTodoItems(state, todoItems) {
+    state.todoItems = todoItems;
+  },
+  setTodoItem(state, todoItem) {
+    state.todoItems.unshift(todoItem);
+  },
+  setCurrentUser(state, user) {
+    state.currentUser = user;
+  }
+}
+
+
+export const actions = {
+  // state.auth.user.id
+  LOAD_TODO_ITEMS({ commit }, { todoItems }) {
+    console.log("fetch todoITems");
+    commit('setTodoItems', todoItems);
+  },
+  ADD_NEW_ITEM({ commit }, { todoItem }) {
+    console.log('add new items');
+    commit('setTodoItem', todoItem);
+  }
+  
+  
+}
 

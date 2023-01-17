@@ -1,7 +1,7 @@
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: "frontend",
+    title: "jaksimsamil",
     htmlAttrs: {
       lang: "en"
     },
@@ -18,7 +18,7 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: ['@/plugins/messages.js'],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -66,5 +66,14 @@ export default {
   },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
-  target: 'static'
+  target: 'static',
+  extend (config, ctx) {
+    if (ctx.isServer) {
+      config.externals = [
+        nodeExternals({
+          whitelist: [/^vue2-datepicker/]
+        })
+      ]
+    }
+  }
 };

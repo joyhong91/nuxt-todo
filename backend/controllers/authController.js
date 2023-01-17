@@ -70,6 +70,7 @@ exports.postLogin = async (req, res, next) => {
 };
 
 exports.getUser = (req, res, next) => {
+  console.log(loadedUser,"============");
   res.status(200).json({
     user: {
       id: loadedUser._id,

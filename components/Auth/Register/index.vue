@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>{{ registerData.errorAlert }}</p>
+    <p class="error-msg"> {{ registerData.errorMsg }}</p>
     <form @submit.prevent="register">
       <div class="mb-3">
         <label for="fullname" class="form-label">Full Name</label>
@@ -44,7 +44,7 @@ export default {
         fullname: "",
         email: "",
         password: "",
-        errorAlert: null
+        errorMsg: ""
       }
     };
   },
@@ -56,10 +56,10 @@ export default {
           email: this.registerData.email,
           password: this.registerData.password
         });
-        this.$router.push("/home");
+        this.$router.push("/");
       } catch (err) {
         console.log(err);
-        this.registerData.errorAlert = "사용할 수 없는 이메일 입니다. 다시 입력해 주세요."
+        this.registerData.errorMsg = this.$ERROR().REGISTER
       }
     }
   }
