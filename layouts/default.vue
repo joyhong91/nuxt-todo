@@ -1,17 +1,14 @@
 <template>
-  <div>
-    <layouts-header />
-    <div class="container">
-      <br />
-      <Nuxt />
-    </div>
-  </div>
+  <v-app>
+    <layouts-header/>
+
+    <v-main>
+      <v-container>
+        <nuxt />
+      </v-container>
+    </v-main>
+
+  </v-app>
 </template>
 
-<script>
-export default {};
-</script>
 
-<style>
-@import url("https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css");
-</style>

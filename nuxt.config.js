@@ -1,9 +1,8 @@
-import * as FontAwesome from './static/fontawesome'
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: "습관공작소",
+    title: "66",
     htmlAttrs: {
       lang: "kr"
     },
@@ -30,23 +29,24 @@ export default {
   components: true,
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
-  buildModules: [
-    ['@nuxtjs/fontawesome', { component: 'fontAwesome', suffix: true }]
-  ],
-  fontawesome: {
-    icons: {
-      solid: FontAwesome.solid,
-      regular: FontAwesome.regular,
-      brands: FontAwesome.brands
-    }
-  },
-
+  buildModules: [],
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/axios
     "@nuxtjs/axios",
-    "@nuxtjs/auth-next"
+    "@nuxtjs/auth-next",
+    "@nuxtjs/vuetify"
   ],
+  vuetify: {
+    theme: {
+      dark: true,
+      themes: {
+        dark: {
+          // primary: '#f2f2f2'
+        }
+      }
+    }
+  },
   auth: {
     strategies: {
       local: {

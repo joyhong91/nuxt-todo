@@ -1,10 +1,9 @@
 <template>
     <div>
-        <div v-show="this.isShow">
-            <font-awesome-layers class="fa" v-on:click="closeMessage()">
-                <!-- suffix: true 덕분에 -icon 생략가능(기존: font-awesome-icon-layers) -->
-                <font-awesome-icon icon="circle-xmark" /> <!-- font-awesome => 위에서 설정한 component 이름 -->
-            </font-awesome-layers>
+        <div v-show="this.isMessageShow">
+            <v-list-item-icon @click="closeMessage">
+                <v-icon aria-hidden="false">mdi-close</v-icon>
+            </v-list-item-icon>
             <VueSlickCarousel v-bind="sliderSettings">
                 <div v-for="message, index in welcome_messages" v-bind:key="index">
                     <p>{{ message }}</p>
@@ -36,12 +35,12 @@ export default {
                 centerMode: true,
                 centerPadding: '1px'
             },
-            isShow: true
+            isMessageShow: true
         }
     },
     methods: {
         closeMessage() {
-            this.isShow = false
+            this.isMessageShow = false
         }
     }
 }

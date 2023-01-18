@@ -1,37 +1,75 @@
 <template>
   <div>
-    <p class="error-msg"> {{ this.loginData.errorMsg }}</p>
+    <p class="error-msg">{{ this.errorMsg }}</p>
     <form @submit.prevent="login">
-      <div class="mb-3">
-        <label for="email" class="form-label">이메일</label>
-        <input type="email" class="form-control" id="email" v-model="loginData.email" aria-describedby="emailHelp" />
+      <v-text-field v-model="email" :error-messages="emailErrors" label="E-mail" required @input="$v.email.$touch()"
+        @blur="$v.email.$touch()"></v-text-field>
+      <v-text-field v-model="password" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :error-messages="passwordErrors"
+        :rules="[rules.required]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="password"
+        counter required @click:append="show1 = !show1" @input="$v.password.$touch()"
+        @blur="$v.password.$touch()"></v-text-field>
+
+      <div class="text-center">
+        <v-btn class="mr-4" @click="login" color="primary">
+          로그인
+        </v-btn>
+        <v-btn @click="clearInputBox">
+          모두지우기
+        </v-btn>
+        <v-btn>
+          <nuxt-link to="/auth/register">회원가입</nuxt-link>
+        </v-btn>
       </div>
-      <div class="mb-3">
-        <label for="password" class="form-label">비밀번호</label>
-        <input type="password" v-model="loginData.password" class="form-control" id="password" />
-      </div>
-      <button type="submit" class="btn btn-submit">로그인</button>
     </form>
-    <nuxt-link to="/auth/register">회원가입</nuxt-link>
   </div>
+
 </template>
 
+
 <script>
+import { validationMixin } from 'vuelidate'
+import { required, email } from 'vuelidate/lib/validators'
+
 export default {
+  mixins: [validationMixin],
+
+  validations: {
+    email: { required, email },
+    password: { required }
+  },
   data() {
     return {
-      loginData: {
-        email: "test123@test.com",
-        password: "test123",
-        errorMsg: null
-      }
+      email: 'test123@test.com',
+      password: 'test123',
+      errorMsg: '',
+      show1: false,
+      rules: {
+        required: value => !!value || 'Required.',
+      },
     };
   },
+
+  computed: {
+    emailErrors() {
+      const errors = []
+      if (!this.$v.email.$dirty) return errors
+      !this.$v.email.email && errors.push(this.$ERROR().EMAIL)
+      !this.$v.email.required && errors.push(this.$ERROR().REQUIRED)
+      return errors
+    },
+    passwordErrors() {
+      const errors = []
+      if (!this.$v.password.$dirty) return errors
+      !this.$v.password.required && errors.push(this.$ERROR().REQUIRED)
+      return errors
+    }
+  },
+
   methods: {
     async login() {
       try {
         let response = await this.$auth.loginWith("local", {
-          data: this.loginData
+          data: { email: this.email, password: this.password }
         }).then(data => {
           //callback func
           this.$store.commit('setCurrentUser', this.$auth.user);
@@ -39,14 +77,23 @@ export default {
         this.$router.push("/");
 
       } catch (err) {
-        this.loginData.errorMsg = this.$ERROR().LOGIN;
+        this.errorMsg = this.$ERROR().LOGIN;
         console.log(err);
       }
+
+    },
+    checkFormValidate() {
+      return this.$v.email.email && this.email !== '' && this.password !== ''
+    },
+    clearInputBox() {
+      this.$v.$reset()
+      this.email = '';
+      this.password = '';
+      this.errorMsg = '';
     }
-  }
+  },
+
 };
 </script>
 
-<style>
 
-</style>
