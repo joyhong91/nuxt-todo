@@ -7,9 +7,16 @@
 }
 
 @font-face {
-    font-family: 'PyeongChangPeace-Bold';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2206-02@1.0/PyeongChangPeace-Bold.woff2') format('woff2');
-    font-weight: 700;
+    font-family: 'Cafe24Ssurround';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/Cafe24Ssurround.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'KOTRA_BOLD-Bold';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10-21@1.1/KOTRA_BOLD-Bold.woff') format('woff');
+    font-weight: normal;
     font-style: normal;
 }
 
@@ -19,7 +26,7 @@
     font-weight: 400;
     src: url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.eot');
     src: url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.eot?#iefix') format('embedded-opentype'), url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.woff') format('woff'), url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.ttf') format('truetype');
-   }
+}
 
 
 //variables
@@ -31,46 +38,69 @@ $darkest_red: #53354A;
 $green_dark0: #F3EFE0;
 $white-color: #f3f3f3;
 
+header {
+    .v-list-item__icon {
+        &:first-child {
+            position: absolute;
+            top: 15%;
+        }
 
+        .v-icon {
+            border: 2px solid #f2f2f2;
+            border-radius: 15px;
+        }
+
+        
+    }
+    .v-image {
+        .v-responsive__sizer {
+            background-color: rgba(0,0,0, 0.4);
+        }
+        .v-image__image{
+            background-position-y: 88% !important;
+        }
+    }
+    
+
+    .app-name--wrap {
+        display: block;
+        text-align: center;
+        width: 100%;
+        margin: 0;
+        margin-top: 15px;
+
+        > a {
+            font-family: "KOTRA_BOLD-Bold";
+            display: block;
+            color: $white-color;
+            text-decoration: none;
+            font-size: 2.8rem;
+        }
+        > p {
+            color: $white-color;
+            font-size: 0.8rem;
+        }
+    }
+}
+
+main {
+    padding-top: 100px !important;
+}
 
 body {
     font-family: "NanumBarunGothic" !important;
     background-color: $white-color !important;
 }
 
-//header
-.navbar-brand {
-    font-family: "PyeongChangPeace-Bold";
-}
 
-nav.navbar {
-    background-color: $dark_navy;
 
-    .navbar-brand {
-        color: $white-color;
-    }
-
-    .navbar-nav .nav-item > .nav-link{
-        color: $white-color;
-        &.nuxt-link-active{
-            text-decoration: underline;
-        }
-    }
-}
 .error-msg {
     color: $dark_red;
 }
 
-.btn{
-    &.btn-submit {
-        display: block;
-        margin: 0 auto;
-        background-color: $dark_orange;
-        color: $white-color;
-        &:hover {
-            color: $darkest_red;
-            border: 1px solid $dark_orange;
-            
-        }
-    }
+
+//reset
+.v-application a {
+    color: $white-color;
+    text-decoration: none;
 }

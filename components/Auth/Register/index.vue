@@ -1,69 +1,103 @@
 <template>
-  <div>
-    <p class="error-msg"> {{ registerData.errorMsg }}</p>
-    <form @submit.prevent="register">
-      <div class="mb-3">
-        <label for="fullname" class="form-label">Full Name</label>
-        <input
-          type="text"
-          v-model="registerData.fullname"
-          class="form-control"
-          id="fullname"
-        />
-      </div>
-      <div class="mb-3">
-        <label for="email" class="form-label">Email address</label>
-        <input
-          type="email"
-          class="form-control"
-          id="email"
-          v-model="registerData.email"
-          aria-describedby="emailHelp"
-        />
-      </div>
-      <div class="mb-3">
-        <label for="password" class="form-label">Password</label>
-        <input
-          type="password"
-          v-model="registerData.password"
-          class="form-control"
-          id="password"
-        />
-      </div>
-      <button type="submit" class="btn btn-primary w-100">Register</button>
-    </form>
-    <nuxt-link to="/auth/login">이미 계정이 있으신가요?</nuxt-link>
-  </div>
+  <form @submit.prevent="register">
+    <v-text-field v-model="name" :error-messages="nameErrors" label="Name" required @input="$v.name.$touch()"
+      @blur="$v.name.$touch()"></v-text-field>
+    <v-text-field v-model="email" :error-messages="emailErrors" label="E-mail" required @input="$v.email.$touch()"
+      @blur="$v.email.$touch()"></v-text-field>
+    <v-text-field v-model="password" :error-messages="passwordErrors" label="password" required
+      @input="$v.password.$touch()" @blur="$v.password.$touch()"></v-text-field>
+
+    <div class="text-center">
+      <v-btn class="mr-4" @click="register" color="primary">
+        회원가입
+      </v-btn>
+      <v-btn @click="clearInputBox">
+        모두지우기
+      </v-btn>
+      <v-btn>
+        <nuxt-link to="/auth/login">로그인</nuxt-link>
+      </v-btn>
+    </div>
+  </form>
 </template>
 
 <script>
+import { validationMixin } from 'vuelidate'
+import { required, email } from 'vuelidate/lib/validators'
+
 export default {
+  mixins: [validationMixin],
+
+  validations: {
+    name: { required },
+    email: { required, email },
+    password: { required }
+  },
   data() {
     return {
-      registerData: {
-        fullname: "",
-        email: "",
-        password: "",
-        errorMsg: ""
-      }
+      name: '',
+      email: '',
+      password: ''
     };
   },
+
+  computed: {
+    nameErrors() {
+      const errors = []
+      if (!this.$v.name.$dirty) return errors
+      !this.$v.name.required && errors.push(this.$ERROR().REQUIRED)
+      return errors
+    },
+    emailErrors() {
+      const errors = []
+      if (!this.$v.email.$dirty) return errors
+      !this.$v.email.email && errors.push(this.$ERROR().EMAIL)
+      !this.$v.email.required && errors.push(this.$ERROR().REQUIRED)
+      return errors
+    },
+    passwordErrors() {
+      const errors = []
+      if (!this.$v.password.$dirty) return errors
+      !this.$v.password.required && errors.push(this.$ERROR().REQUIRED)
+      return errors
+    }
+  },
+
   methods: {
     async register() {
+
       try {
-        const user = await this.$axios.$post("/api/auth/signin", {
-          fullname: this.registerData.fullname,
-          email: this.registerData.email,
-          password: this.registerData.password
-        });
-        this.$router.push("/");
+        if (this.checkFormValidate()) {
+          const user = await this.$axios.$post("/api/auth/signin", {
+            fullname: this.name,
+            email: this.email,
+            password: this.password
+          });
+          this.$router.push("/");
+        } else {
+          return false
+        }
+
       } catch (err) {
         console.log(err);
-        this.registerData.errorMsg = this.$ERROR().REGISTER
+        this.errorMsg = this.$ERROR().REGISTER
       }
+    },
+    checkFormValidate() {
+      return this.name !== '' && this.$v.email.email && this.email !== '' && this.password !== ''
+    },
+    clearInputBox() {
+      this.$v.$reset()
+      this.name = '';
+      this.email = '';
+      this.password = '';
     }
-  }
+  },
+
 };
 </script>
 
-<style></style>
+
+<style>
+
+</style>
