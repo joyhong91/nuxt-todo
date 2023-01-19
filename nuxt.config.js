@@ -86,7 +86,7 @@ export default {
   },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
-  // target: 'static',
+  target: 'static', //for netlify 
   extend (config, ctx) {
     if (ctx.isServer) {
       config.externals = [
