@@ -19,7 +19,7 @@
 
                 <v-list-item-content>
                     <v-list-item-title v-if="isAuthenticated">
-                        {{ this.$auth.user.id }}
+                        {{ this.$auth.user.fullname }}
                     </v-list-item-title>
                     <v-list-item-title v-else>
                         대기업 사장님

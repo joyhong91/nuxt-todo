@@ -1,36 +1,57 @@
 <template>
-    <div>
-        <p>{{ getTodoItems.length }}</p>
-        <ul>
-            <li class="list-item" v-for="todoItem in getTodoItems" v-bind:key="todoItem.id">
-                <div class="description">
-                    <p> {{ todoItem.title }}</p>
-                </div>
-            </li>
-        </ul>
+    <v-card class="mx-auto">
+        <v-toolbar color="teal">
+            <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
-    </div>
+            <v-toolbar-title>오전습관</v-toolbar-title>
+        </v-toolbar>
+
+        <v-list>
+            <v-list-item-group multiple>
+                <v-list-item v-for="todoItem in getTodoItemsByPagination" v-bind:key="todoItem.id">
+                    <template v-slot:default="{ active, }">
+                        <v-list-item-action>
+                            <v-checkbox :input-value="active" color="primary"></v-checkbox>
+                        </v-list-item-action>
+
+                        <v-list-item-content>
+                            <v-list-item-title>{{ todoItem.title }}</v-list-item-title>
+                        </v-list-item-content>
+                    </template>
+                </v-list-item>
+            </v-list-item-group>
+        </v-list>
+
+        <div class="text-center">
+            <v-pagination v-model="page" :length="totalPages" @input="next"></v-pagination>
+        </div>
+    </v-card>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
+    data() {
+        return {
+            page: 1
+        }
+    },
+    methods: {
+        next(page) {
+            this.$store.dispatch('LOAD_TODO_ITEMS_PAGINATION', {page});
+        }
+    },
     async fetch() {
         try {
-            const userId = this.$auth.user.id;
-            const response = await this.$axios.$get("/getTodosByUserId",
-                { params: { userId } }).then(result => {
-                    this.$store.dispatch('LOAD_TODO_ITEMS', {
-                        todoItems: result.todoItems
-                    })
-                });
+            await this.$store.dispatch('LOAD_TODO_ITEMS');
         } catch (err) {
             console.log(err);
         }
     },
     computed: {
-        ...mapGetters(['getTodoItems'])
+        ...mapGetters(['getTodoItemsByPagination']),
+        ...mapState(['totalPages'])
     }
 
 };

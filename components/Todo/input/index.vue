@@ -39,10 +39,7 @@ export default {
             deadline: this.finishedAt
           }
 
-          const todo = await this.$axios.$post("/addTodo", newTodoItem);
-          this.$store.dispatch('ADD_NEW_ITEM', {
-            todoItem: newTodoItem
-          })
+          await this.$store.dispatch('ADD_NEW_ITEM', {todoItem: newTodoItem});
           this.clearInputBox();
         }else {
           this.errorMsg = this.$ERROR().EMPTY;

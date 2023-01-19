@@ -83,19 +83,17 @@ header {
     }
 }
 
-main {
-    padding-top: 100px !important;
-}
-
 body {
     font-family: "NanumBarunGothic" !important;
-    background-color: $white-color !important;
 }
-
-
 
 .error-msg {
     color: $dark_red;
+}
+
+.message--wrap {
+    border: 1px solid $white-color;
+    border-radius: 6px;
 }
 
 
