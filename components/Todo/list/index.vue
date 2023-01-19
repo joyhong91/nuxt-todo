@@ -3,7 +3,7 @@
         <v-toolbar color="teal">
             <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
-            <v-toolbar-title>오전습관</v-toolbar-title>
+            <v-toolbar-title>JUST DO IT 66DAYS</v-toolbar-title>
         </v-toolbar>
 
         <v-list>
@@ -20,11 +20,14 @@
                     </template>
                 </v-list-item>
             </v-list-item-group>
+            <div class="text-center">
+                <client-only>
+                    <v-pagination v-model="page" :length="totalPages" @input="next"></v-pagination>
+                </client-only>
+            </div>
         </v-list>
 
-        <div class="text-center">
-            <v-pagination v-model="page" :length="totalPages" @input="next"></v-pagination>
-        </div>
+
     </v-card>
 </template>
 
@@ -39,7 +42,7 @@ export default {
     },
     methods: {
         next(page) {
-            this.$store.dispatch('LOAD_TODO_ITEMS_PAGINATION', {page});
+            this.$store.dispatch('LOAD_TODO_ITEMS_PAGINATION', { page });
         }
     },
     async fetch() {

@@ -49,10 +49,8 @@ exports.postLogin = async (req, res, next) => {
       throw error;
     }
     loadedUser = user;
-    console.log("login!!!!");
-    console.log(user);
-    const comparePassword = bcrypt.compare(password, user.password);
-    console.log(comparePassword);
+    
+    const comparePassword = await bcrypt.compare(password, user.password);
 
     if (!comparePassword) {
       const error = new Error("password is not match!");

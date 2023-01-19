@@ -71,7 +71,7 @@ export default {
         let response = await this.$auth.loginWith("local", {
           data: { email: this.email, password: this.password }
         }).then(data => {
-          //callback func
+          console.log(data);
           this.$store.commit('setCurrentUser', this.$auth.user);
         });
         this.$router.push("/");
