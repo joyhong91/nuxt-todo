@@ -39,6 +39,7 @@ $green_dark0: #F3EFE0;
 $white-color: #f3f3f3;
 
 header {
+    overflow: hidden;
     .v-list-item__icon {
         &:first-child {
             position: absolute;
@@ -118,7 +119,6 @@ body {
     }
 
     .mx-icon-calendar {
-        position:relative;
         color: $white-color;
     }
 }
