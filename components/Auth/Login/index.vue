@@ -39,7 +39,7 @@ export default {
   },
   data() {
     return {
-      email: 'test123@test.com',
+      email: 'test@test.com',
       password: 'test123',
       errorMsg: '',
       show1: false,
@@ -71,7 +71,7 @@ export default {
         let response = await this.$auth.loginWith("local", {
           data: { email: this.email, password: this.password }
         }).then(data => {
-          //callback func
+          console.log(data);
           this.$store.commit('setCurrentUser', this.$auth.user);
         });
         this.$router.push("/");

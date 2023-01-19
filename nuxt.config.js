@@ -72,6 +72,11 @@ export default {
           user: { url: "/api/auth/user", method: "get" }
         }
       }
+    },
+    redirect: {
+      home: false,
+      login: '/login',
+      logout: '/'
     }
   },
 
@@ -81,7 +86,7 @@ export default {
   },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
-  target: 'static',
+  // target: 'static',
   extend (config, ctx) {
     if (ctx.isServer) {
       config.externals = [

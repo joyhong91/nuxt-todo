@@ -3,7 +3,7 @@
     <layouts-header/>
 
     <v-main>
-      <v-container>
+      <v-container class="pa-5">
         <nuxt />
       </v-container>
     </v-main>

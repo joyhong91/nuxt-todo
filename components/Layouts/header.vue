@@ -1,16 +1,23 @@
 <template>
     <div>
-        <v-toolbar prominent src="https://images.unsplash.com/photo-1589830258006-f91b5cb1eab5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2828&q=80">
+        <v-toolbar prominent
+            src="https://images.unsplash.com/photo-1589830258006-f91b5cb1eab5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2828&q=80">
             <v-list-item-icon @click.stop="drawer = !drawer">
                 <v-icon aria-hidden="false" dark>mdi-account</v-icon>
             </v-list-item-icon>
             <v-list-item-icon class="app-name--wrap">
                 <nuxt-link to="/">66</nuxt-link>
-                <p class="font-weight-medium">21일이면 습관을 바꿀 수 있고, 66일이면 몸에 베인다!</p>
+                <div class="text-center message--wrap" v-show="this.isMessageShow">
+                    <VueSlickCarousel v-bind="sliderSettings">
+                        <div v-for="message, index in welcome_messages" v-bind:key="index">
+                            <p>{{ message }}</p>
+                        </div>
+                    </VueSlickCarousel>
+                </div>
             </v-list-item-icon>
         </v-toolbar>
-    
-    
+
+
         <v-navigation-drawer v-model="drawer" absolute temporary>
             <v-list-item>
                 <v-list-item-icon>
@@ -19,7 +26,7 @@
 
                 <v-list-item-content>
                     <v-list-item-title v-if="isAuthenticated">
-                        {{ this.$auth.user.id }}
+                        {{ this.$auth.user.name }}
                     </v-list-item-title>
                     <v-list-item-title v-else>
                         대기업 사장님
@@ -68,10 +75,26 @@
 </template>
 
 <script>
+import VueSlickCarousel from 'vue-slick-carousel'
+import 'vue-slick-carousel/dist/vue-slick-carousel.css'
+
 export default {
+    components: {
+        VueSlickCarousel
+    },
     data() {
         return {
             drawer: null,
+            welcome_messages: this.$WELCOME_MESSAGES(),
+            sliderSettings: {
+                arrows: false,
+                dots: false,
+                autoplay: true,
+                autoplaySpeed: 5000,
+                centerMode: true,
+                centerPadding: '1px'
+            },
+            isMessageShow: true
         }
     },
     methods: {

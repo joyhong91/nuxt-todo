@@ -69,7 +69,7 @@ export default {
       try {
         if (this.checkFormValidate()) {
           const user = await this.$axios.$post("/api/auth/signin", {
-            fullname: this.name,
+            name: this.name,
             email: this.email,
             password: this.password
           });

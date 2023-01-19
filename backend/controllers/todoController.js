@@ -3,19 +3,19 @@ const jwt = require("jsonwebtoken");
 
 
 exports.addTodo = async (req, res, next) => {
-    const { userId, title, deadline, isDone } = req.body;
+    const { userId, title, startAt, isDone } = req.body;
     try {
         const todo = new todoModel({
             userId,
             title,
             isDone,
-            deadline
+            startAt
         });
         const result = await todo.save();
         
         res.status(200).json({
             message: "success add todo",
-            todoItem: {userId, title, isDone, deadline}
+            todoItem: {userId, title, isDone, startAt}
         });
 
     } catch (err) {
