@@ -92,8 +92,7 @@ body {
 }
 
 .message--wrap {
-    border: 1px solid $white-color;
-    border-radius: 6px;
+    font-size:0.8rem;
 }
 
 
@@ -101,4 +100,25 @@ body {
 .v-application a {
     color: $white-color;
     text-decoration: none;
+}
+
+.mx-datepicker {
+    width: 100% !important;
+}
+
+.mx-input-wrapper {
+    border: 1px solid rgba(256,256,256,0.2);
+    border-radius: 3px;
+    max-width: 230px;
+    padding: 5px;
+
+    .datepicker {
+        width: 85%;
+        color: $white-color;
+    }
+
+    .mx-icon-calendar {
+        position:relative;
+        color: $white-color;
+    }
 }

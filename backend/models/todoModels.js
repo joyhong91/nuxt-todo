@@ -1,18 +1,19 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const users = require('./userModel');
 
 const TodoSchema = new Schema(
   {
     userId: {
-      type: String,
-      required: true,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
     },
     title: {
       type: String,
       required: true,
     },
-    deadline: {
+    startAt: {
       type: Date,
       required: false,
     },

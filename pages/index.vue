@@ -1,6 +1,5 @@
 <template>
   <div>
-    <welcome-messages/>
     <todo-input />
     <todo-list />
   </div>

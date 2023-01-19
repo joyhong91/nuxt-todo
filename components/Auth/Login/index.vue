@@ -39,7 +39,7 @@ export default {
   },
   data() {
     return {
-      email: 'test123@test.com',
+      email: 'test@test.com',
       password: 'test123',
       errorMsg: '',
       show1: false,
