@@ -3,7 +3,7 @@ const userModel = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 
 exports.postSignin = async (req, res, next) => {
-  const { fullname, email, password } = req.body;
+  const { name, email, password } = req.body;
   try {
     const exsitUser = await userModel.findOne({ email: email });
     if (exsitUser) {
@@ -19,7 +19,7 @@ exports.postSignin = async (req, res, next) => {
 
     const hashedPassword = await bcrypt.hash(password, 12);
     const user = new userModel({
-      fullname: fullname,
+      name: name,
       email: email,
       password: hashedPassword,
     });
@@ -49,10 +49,8 @@ exports.postLogin = async (req, res, next) => {
       throw error;
     }
     loadedUser = user;
-    console.log("login!!!!");
-    console.log(user);
-    const comparePassword = bcrypt.compare(password, user.password);
-    console.log(comparePassword);
+    
+    const comparePassword = await bcrypt.compare(password, user.password);
 
     if (!comparePassword) {
       const error = new Error("password is not match!");
@@ -75,7 +73,7 @@ exports.getUser = (req, res, next) => {
   res.status(200).json({
     user: {
       id: loadedUser._id,
-      fullname: loadedUser.fullname,
+      name: loadedUser.name,
       email: loadedUser.email,
     },
   });

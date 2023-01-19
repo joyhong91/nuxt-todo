@@ -72,6 +72,11 @@ export default {
           user: { url: "/api/auth/user", method: "get" }
         }
       }
+    },
+    redirect: {
+      home: false,
+      login: '/login',
+      logout: '/'
     }
   },
 

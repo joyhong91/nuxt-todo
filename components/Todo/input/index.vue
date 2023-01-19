@@ -1,16 +1,23 @@
 <template>
-  <div>
+  <div class="pa-5">
     <p class="error-msg"> {{ this.errorMsg }}</p>
     <form @submit.prevent="addTodo">
-      <div class="mb-3">
-        <input type="text" v-model="todoTitle" class="form-control" />
-      </div>
-      <client-only>
-        <date-picker v-model="finishedAt" valueType="format" format="YYYY-MM-DD"
-          input-class="form-control sm white datepicker" placeholder="종료일"></date-picker>
-      </client-only>
-      <button type="submit" class="btn btn-submit w-100">입력</button>
+      <v-row>
+        <v-col cols="12" sm="8" md="8" class="pt-0 pb-0 mb-3">
+          <v-text-field label="습관으로 만들 행동 무엇인가요?" outlined v-model="todoTitle" hide-details="auto"></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="4" md="4" class="d-flex justify-center align-center pt-0 pb-0 mb-3">
+          <client-only>
+          <date-picker v-model="startAt" valueType="format" format="YYYY-MM-DD" input-class="datepicker text-center"
+            placeholder="시작일"></date-picker>
+          </client-only>
+          <v-btn class="mr-4" @click="addTodo">
+            입력
+          </v-btn>
+        </v-col>
+      </v-row>
     </form>
+
   </div>
 </template>
 
@@ -24,7 +31,7 @@ export default {
   data() {
     return {
       todoTitle: '',
-      finishedAt: new Date(),
+      startAt: new Date(),
       errorMsg: ''
     };
   },
@@ -36,15 +43,12 @@ export default {
             userId: this.$auth.user.id,
             isDone: false,
             title: this.todoTitle.trim(),
-            deadline: this.finishedAt
+            startAt: this.startAt
           }
 
-          const todo = await this.$axios.$post("/addTodo", newTodoItem);
-          this.$store.dispatch('ADD_NEW_ITEM', {
-            todoItem: newTodoItem
-          })
+          await this.$store.dispatch('ADD_NEW_ITEM', { todoItem: newTodoItem });
           this.clearInputBox();
-        }else {
+        } else {
           this.errorMsg = this.$ERROR().EMPTY;
         }
       } catch (err) {

@@ -1,6 +1,10 @@
 export const state = () => ({
   currentUser: {},
-  todoItems: []
+  todoItems: [],
+  itemsPerPage: 5,
+  pageStartOffset: 0,
+  pageEndOffset: 0,
+  totalPages: 0,
 })
 
 
@@ -13,12 +17,15 @@ export const getters = {
   },
   getTodoItems(state) {
     return state.todoItems;
+  },
+  getTodoItemsByPagination(state) {
+    return state.todoItems.slice(state.pageStartOffset, state.pageEndOffset)
   }
-  
+
 };
 
 export const mutations = {
-  addTodoItems(state,todoItem) {
+  addTodoItems(state, todoItem) {
     state.todoItems.push(todoItem);
   },
   setTodoItems(state, todoItems) {
@@ -29,21 +36,37 @@ export const mutations = {
   },
   setCurrentUser(state, user) {
     state.currentUser = user;
+  },
+  setTodoItemsPagination(state, page) {
+    const currentPage = page ? page : 1;
+    state.pageStartOffset = (currentPage - 1) * state.itemsPerPage;
+    state.pageEndOffset = state.pageStartOffset + state.itemsPerPage;
+
+    state.totalPages = Math.ceil(state.todoItems.length / state.itemsPerPage);
   }
 }
 
 
+//actions 비동기 로직 
 export const actions = {
   // state.auth.user.id
-  LOAD_TODO_ITEMS({ commit }, { todoItems }) {
-    console.log("fetch todoITems");
-    commit('setTodoItems', todoItems);
+  async LOAD_TODO_ITEMS({ commit }) {
+    const user = Object.keys(this.state.currentUser).length === 0 ? this.$auth.user : this.state.currentUser;
+    await this.$axios.$get("/getTodosByUserId",
+      { params: { userId: user.id } }).then(result => {
+        commit('setTodoItems', result.todoItems)
+      });
+    commit('setTodoItemsPagination');  
   },
-  ADD_NEW_ITEM({ commit }, { todoItem }) {
-    console.log('add new items');
+  async ADD_NEW_ITEM({ commit }, { todoItem }) {
+    await this.$axios.$post("/addTodo", todoItem);
     commit('setTodoItem', todoItem);
+  },
+
+  LOAD_TODO_ITEMS_PAGINATION({ commit }, { page }) {
+    commit('setTodoItemsPagination', page);
   }
-  
-  
+
+
 }
 
