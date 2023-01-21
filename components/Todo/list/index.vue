@@ -11,11 +11,11 @@
                 <v-list-item v-for="todoItem in getTodoItemsByPagination" v-bind:key="todoItem.id">
                     <template v-slot:default="{ active, }">
                         <v-list-item-action>
-                            <v-checkbox :input-value="active" color="primary"></v-checkbox>
+                            <v-checkbox v-model="isDone" :input-value="active" color="primary"></v-checkbox>
                         </v-list-item-action>
 
                         <v-list-item-content>
-                            <v-list-item-title>{{ todoItem.title }}</v-list-item-title>
+                            <v-list-item-title>{{ todoItem.title }} :: {{ isDone }}</v-list-item-title>
                         </v-list-item-content>
                     </template>
                 </v-list-item>
@@ -54,7 +54,7 @@ export default {
     },
     computed: {
         ...mapGetters(['getTodoItemsByPagination']),
-        ...mapState(['totalPages'])
+        ...mapState(['totalPages', 'isDone'])
     }
 
 };

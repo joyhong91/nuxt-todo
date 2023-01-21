@@ -1,13 +1,16 @@
 export const state = () => ({
   currentUser: {},
   todoItems: [],
+  isDone: true,
   itemsPerPage: 5,
   pageStartOffset: 0,
   pageEndOffset: 0,
   totalPages: 0,
 })
 
+export const setters = {
 
+}
 export const getters = {
   isAuthenticated(state) {
     return state.auth.loggedIn; // auth object as default will be added in vuex state, when you initialize nuxt auth
@@ -20,6 +23,9 @@ export const getters = {
   },
   getTodoItemsByPagination(state) {
     return state.todoItems.slice(state.pageStartOffset, state.pageEndOffset)
+  },
+  getIsDone(state) {
+    return state.isDone;
   }
 
 };

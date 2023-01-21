@@ -1,5 +1,6 @@
 <template>
   <div>
+    <todo-dashboard/>
     <todo-input />
     <todo-list />
   </div>
