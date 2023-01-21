@@ -53,7 +53,7 @@ exports.updateIsDone = async (req, res, next) => {
         const todo = await todoModel.findByIdAndUpdate(todoId, {$set: {isDone}});
 
         res.status(200).json({
-            message: "success load todo list",
+            message: "success update todo isDone",
             result: {
                 todoId,
                 isDone
