@@ -7,15 +7,20 @@
         </v-toolbar>
 
         <v-list>
-            <v-list-item-group multiple>
-                <v-list-item v-for="todoItem in getTodoItemsByPagination" v-bind:key="todoItem.id">
-                    <template v-slot:default="{ active, }">
+            <v-list-item-group>
+                <v-list-item v-for="todoItem in getTodoItemsByPagination" v-bind:key="todoItem.id" v-bind:class="{isDone:todoItem.isDone}" @click="toggleItem({ isDone: todoItem.isDone, todoId: todoItem._id })">
+                    <template>
                         <v-list-item-action>
-                            <v-checkbox :input-value="active" color="primary"></v-checkbox>
+                            <v-list-item-icon>
+                                <v-icon v-if="!todoItem.isDone" aria-hidden="false">mdi-circle</v-icon>
+                                <v-icon v-else aria-hidden="false">mdi-checkbox-marked-circle</v-icon>
+                            </v-list-item-icon>
                         </v-list-item-action>
 
                         <v-list-item-content>
-                            <v-list-item-title>{{ todoItem.title }}</v-list-item-title>
+                            <v-list-item-title>{{ todoItem.title }} || {{ todoItem.isDone }} || {{
+                                getDateFormat(todoItem.startAt)
+                            }} {{ todoItem._id }}</v-list-item-title>
                         </v-list-item-content>
                     </template>
                 </v-list-item>
@@ -43,6 +48,15 @@ export default {
     methods: {
         next(page) {
             this.$store.dispatch('LOAD_TODO_ITEMS_PAGINATION', { page });
+        },
+        getDateFormat(date) {
+            const todoDate = new Date(date);
+            const getYYYYMMDD = todoDate.getFullYear() + "-" + todoDate.getMonth() + 1 + "-" + todoDate.getDate();
+            return getYYYYMMDD;
+        },
+        toggleItem(todoObj) {
+            console.log(todoObj);
+            this.$store.dispatch('UPDATE_ISDONE', todoObj)
         }
     },
     async fetch() {

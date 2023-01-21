@@ -7,7 +7,6 @@ export const state = () => ({
   totalPages: 0,
 })
 
-
 export const getters = {
   isAuthenticated(state) {
     return state.auth.loggedIn; // auth object as default will be added in vuex state, when you initialize nuxt auth
@@ -20,6 +19,13 @@ export const getters = {
   },
   getTodoItemsByPagination(state) {
     return state.todoItems.slice(state.pageStartOffset, state.pageEndOffset)
+  },
+  getCountTodoItems(state) {
+    return state.todoItems.length;
+  },
+  getCountDoneItems(state) {
+    console.log(state.todoItems.filter(todo => todo.isDone));
+    return state.todoItems.filter(todo => todo.isDone).length;
   }
 
 };
@@ -43,6 +49,10 @@ export const mutations = {
     state.pageEndOffset = state.pageStartOffset + state.itemsPerPage;
 
     state.totalPages = Math.ceil(state.todoItems.length / state.itemsPerPage);
+  },
+  updateIsDone(state, result) {
+    const todoItem = state.todoItems.find(todo => todo._id === result.todoId);
+    todoItem.isDone = !todoItem.isDone; 
   }
 }
 
@@ -52,11 +62,11 @@ export const actions = {
   // state.auth.user.id
   async LOAD_TODO_ITEMS({ commit }) {
     const user = Object.keys(this.state.currentUser).length === 0 ? this.$auth.user : this.state.currentUser;
-    await this.$axios.$get("/getTodosByUserId",
-      { params: { userId: user.id } }).then(result => {
-        commit('setTodoItems', result.todoItems)
+    await this.$axios.$get("/getTodosByUserId", {
+      params: { userId: user.id } }).then(result => {
+        commit('setTodoItems', result.todoItems);
       });
-    commit('setTodoItemsPagination');  
+    commit('setTodoItemsPagination');
   },
   async ADD_NEW_ITEM({ commit }, { todoItem }) {
     await this.$axios.$post("/addTodo", todoItem);
@@ -65,6 +75,11 @@ export const actions = {
 
   LOAD_TODO_ITEMS_PAGINATION({ commit }, { page }) {
     commit('setTodoItemsPagination', page);
+  },
+
+  async UPDATE_ISDONE({ commit }, todoObj) {
+    const response = await this.$axios.patch('/updateIsDone', todoObj);
+    commit('updateIsDone', response.data.result);
   }
 
 
