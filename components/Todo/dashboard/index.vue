@@ -1,5 +1,5 @@
 <template>
-    <div class="count--wrap">
+    <div class="count--wrap text-center">
         <span>{{getCountDoneItems}} </span>
         <span>/</span>
         <span>{{ getCountTodoItems }}</span>

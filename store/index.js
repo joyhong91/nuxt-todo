@@ -1,5 +1,6 @@
 export const state = () => ({
   currentUser: {},
+  isGuest: false,
   todoItems: [],
   itemsPerPage: 5,
   pageStartOffset: 0,
@@ -24,7 +25,6 @@ export const getters = {
     return state.todoItems.length;
   },
   getCountDoneItems(state) {
-    console.log(state.todoItems.filter(todo => todo.isDone));
     return state.todoItems.filter(todo => todo.isDone).length;
   }
 
@@ -43,6 +43,9 @@ export const mutations = {
   setCurrentUser(state, user) {
     state.currentUser = user;
   },
+  setGuest(state) {
+    state.isGuest = true;
+  },
   setTodoItemsPagination(state, page) {
     const currentPage = page ? page : 1;
     state.pageStartOffset = (currentPage - 1) * state.itemsPerPage;
@@ -50,9 +53,15 @@ export const mutations = {
 
     state.totalPages = Math.ceil(state.todoItems.length / state.itemsPerPage);
   },
-  updateIsDone(state, result) {
-    const todoItem = state.todoItems.find(todo => todo._id === result.todoId);
-    todoItem.isDone = !todoItem.isDone; 
+  updateIsDone(state, todo) {
+    const todoItem = state.todoItems.find(item => item._id === todo.todoId);
+    todoItem.isDone = !todoItem.isDone;
+  },
+  deleteTodo(state, todo) {
+    const todoItem = state.todoItems.find(item => item._id === todo._id);
+    const index =  state.todoItems.indexOf(todoItem);
+
+    state.todoItems.splice(index, 1);
   }
 }
 
@@ -63,14 +72,15 @@ export const actions = {
   async LOAD_TODO_ITEMS({ commit }) {
     const user = Object.keys(this.state.currentUser).length === 0 ? this.$auth.user : this.state.currentUser;
     await this.$axios.$get("/getTodosByUserId", {
-      params: { userId: user.id } }).then(result => {
-        commit('setTodoItems', result.todoItems);
-      });
+      params: { userId: user.id }
+    }).then(result => {
+      commit('setTodoItems', result.todoItems);
+    });
     commit('setTodoItemsPagination');
   },
   async ADD_NEW_ITEM({ commit }, { todoItem }) {
-    await this.$axios.$post("/addTodo", todoItem);
-    commit('setTodoItem', todoItem);
+    const response = await this.$axios.$post("/addTodo", todoItem);
+    commit('setTodoItem', response.todoItem);
   },
 
   LOAD_TODO_ITEMS_PAGINATION({ commit }, { page }) {
@@ -80,6 +90,16 @@ export const actions = {
   async UPDATE_ISDONE({ commit }, todoObj) {
     const response = await this.$axios.patch('/updateIsDone', todoObj);
     commit('updateIsDone', response.data.result);
+  },
+
+  async DELETE_TODO({ commit }, { todoId }) {
+    console.log("DELETE_TODO");
+    console.log(todoId);
+    const response = await this.$axios.$delete("/deleteTodoById", {
+      params: { _id: todoId }
+    });
+    console.log(response);
+    commit('deleteTodo', response.deletedTodo);
   }
 
 

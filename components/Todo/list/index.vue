@@ -8,7 +8,9 @@
 
         <v-list>
             <v-list-item-group>
-                <v-list-item v-for="todoItem in getTodoItemsByPagination" v-bind:key="todoItem.id" v-bind:class="{isDone:todoItem.isDone}" @click="toggleItem({ isDone: todoItem.isDone, todoId: todoItem._id })">
+                <v-list-item v-for="todoItem in getTodoItemsByPagination" v-bind:key="todoItem.id"
+                    v-bind:class="{ isDone: todoItem.isDone }"
+                    @click="toggleItem({ isDone: todoItem.isDone, todoId: todoItem._id })">
                     <template>
                         <v-list-item-action>
                             <v-list-item-icon>
@@ -22,6 +24,14 @@
                                 getDateFormat(todoItem.startAt)
                             }} {{ todoItem._id }}</v-list-item-title>
                         </v-list-item-content>
+
+                        <v-list-item-icon v-on:click.stop="deleteTodo(todoItem._id)">
+                            <v-btn class="ma-2" dark>
+                                <v-icon dark left>
+                                    mdi-minus-circle
+                                </v-icon>DELETE
+                            </v-btn>
+                        </v-list-item-icon>
                     </template>
                 </v-list-item>
             </v-list-item-group>
@@ -57,6 +67,11 @@ export default {
         toggleItem(todoObj) {
             console.log(todoObj);
             this.$store.dispatch('UPDATE_ISDONE', todoObj)
+        },
+        deleteTodo(todoId) {
+            console.log("delete Todo  vue ");
+            console.log(todoId);
+            this.$store.dispatch('DELETE_TODO', { todoId });
         }
     },
     async fetch() {
