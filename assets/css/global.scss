@@ -96,6 +96,21 @@ body {
     font-size:0.8rem;
 }
 
+.count--wrap {
+    font-size: 3rem;
+    font-family: "KOTRA_BOLD-Bold";
+}
+.v-list-item {
+    &.isDone {
+        opacity: 0.4;
+
+        .v-list-item__content > .v-list-item__title {
+            text-decoration: line-through;
+        }
+    }
+    
+}
+
 
 //reset
 .v-application a {
