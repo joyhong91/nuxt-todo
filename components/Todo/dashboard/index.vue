@@ -1,5 +1,7 @@
 <template>
+    
     <div class="count--wrap text-center">
+        <p>습관이 몸에 베이기 까지 66일!</p>
         <span>{{getCountDoneItems}} </span>
         <span>/</span>
         <span>{{ getCountTodoItems }}</span>
