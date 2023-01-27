@@ -73,11 +73,8 @@ export default {
   methods: {
     async login() {
       try {
-        let response = await this.$auth.loginWith("local", {
+        const response = await this.$auth.loginWith("local", {
           data: { email: this.email, password: this.password }
-        }).then(data => {
-          console.log(data);
-          this.$store.commit('setCurrentUser', this.$auth.user);
         });
         this.$router.push("/");
 

@@ -1,6 +1,6 @@
 export const state = () => ({
-  currentUser: {},
   isGuest: false,
+  currentUser: {},
   todoItems: [],
   itemsPerPage: 5,
   pageStartOffset: 0,
@@ -44,6 +44,11 @@ export const mutations = {
     state.currentUser = user;
   },
   setGuest(state) {
+    state.currentUser = {
+      email: 'guest@guest.com',
+      password: 'password',
+      id: 'guestguest12'
+    }
     state.isGuest = true;
   },
   setTodoItemsPagination(state, page) {
@@ -72,9 +77,8 @@ export const mutations = {
 //actions 비동기 로직 
 export const actions = {
   async LOAD_TODO_ITEMS({ commit }) {
-    const user = Object.keys(this.state.currentUser).length === 0 ? this.$auth.user : this.state.currentUser;
     const response = await this.$axios.$get("/getTodosByUserId", {
-      params: { userId: user.id }
+      params: { userId: this.state.currentUser.id }
     });
 
     commit('setTodoItems', response.todoItems);

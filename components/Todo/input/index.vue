@@ -43,7 +43,7 @@ export default {
       try {
         if (this.todoTitle !== '' && this.todoTitle.trim().length > 0) {
           const newTodoItem = {
-            userId: this.$auth.user.id,
+            userId: this.$store.state.currentUser.id,
             isDone: false,
             title: this.todoTitle.trim(),
             startAt: this.startAt
