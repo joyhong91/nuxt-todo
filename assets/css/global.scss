@@ -37,6 +37,12 @@ $dark_red: #903749;
 $darkest_red: #53354A;
 $green_dark0: #F3EFE0;
 $white-color: #f3f3f3;
+$bg-bl-op4: rgba(0,0,0, 0.4);
+
+
+body {
+    font-family: "NanumBarunGothic" !important;
+}
 
 header {
     overflow: hidden;
@@ -47,7 +53,7 @@ header {
         }
 
         .v-icon {
-            border: 2px solid #f2f2f2;
+            border: 2px solid $white-color;
             border-radius: 15px;
         }
 
@@ -55,7 +61,7 @@ header {
     }
     .v-image {
         .v-responsive__sizer {
-            background-color: rgba(0,0,0, 0.4);
+            background-color: $bg-bl-op4;
         }
         .v-image__image{
             background-position-y: 88% !important;
@@ -84,16 +90,33 @@ header {
     }
 }
 
-body {
-    font-family: "NanumBarunGothic" !important;
-}
 
-.error-msg {
-    color: $dark_red;
-}
 
 .message--wrap {
     font-size:0.8rem;
+}
+
+.count--wrap {
+    font-size: 3rem;
+    font-family: "KOTRA_BOLD-Bold";
+
+    >p {
+        font-size: 0.9rem;
+    }
+}
+.v-list-item {
+    &.isDone {
+        opacity: 0.4;
+
+        .v-list-item__content > .v-list-item__title {
+            text-decoration: line-through;
+        }
+    }
+    
+}
+
+.btn-deleteAll {
+    right: 0;
 }
 
 

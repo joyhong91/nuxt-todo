@@ -1,12 +1,14 @@
 <template>
   <div>
-    <p class="error-msg">{{ this.errorMsg }}</p>
-    <form @submit.prevent="login">
+    <v-alert v-if="this.errorMsg != ''" dense outlined type="error">
+      {{ this.errorMsg }}
+    </v-alert>
+    <form @submit.prevent="login" @keyup.enter="login">
       <v-text-field v-model="email" :error-messages="emailErrors" label="E-mail" required @input="$v.email.$touch()"
         @blur="$v.email.$touch()"></v-text-field>
       <v-text-field v-model="password" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :error-messages="passwordErrors"
-        :rules="[rules.required]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="password"
-        counter required @click:append="show1 = !show1" @input="$v.password.$touch()"
+        :rules="[rules.required]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="password" counter
+        required @click:append="show1 = !show1" @input="$v.password.$touch()"
         @blur="$v.password.$touch()"></v-text-field>
 
       <div class="text-center">
@@ -18,6 +20,9 @@
         </v-btn>
         <v-btn>
           <nuxt-link to="/auth/register">회원가입</nuxt-link>
+        </v-btn>
+        <v-btn @click="setGuest()">
+          비회원모드
         </v-btn>
       </div>
     </form>
@@ -68,11 +73,8 @@ export default {
   methods: {
     async login() {
       try {
-        let response = await this.$auth.loginWith("local", {
+        const response = await this.$auth.loginWith("local", {
           data: { email: this.email, password: this.password }
-        }).then(data => {
-          console.log(data);
-          this.$store.commit('setCurrentUser', this.$auth.user);
         });
         this.$router.push("/");
 
@@ -90,6 +92,10 @@ export default {
       this.email = '';
       this.password = '';
       this.errorMsg = '';
+    },
+    setGuest() {
+      this.$store.commit('setGuest');
+      this.$router.push('/');
     }
   },
 

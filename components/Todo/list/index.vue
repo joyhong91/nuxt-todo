@@ -4,19 +4,38 @@
             <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
             <v-toolbar-title>JUST DO IT 66DAYS</v-toolbar-title>
+            <v-btn v-if="getCountTodoItems > 0" class="btn-deleteAll mr-4" @click="deleteTodoAll" outlined absolute>
+                DELETE ALL
+            </v-btn>
+
         </v-toolbar>
 
         <v-list>
-            <v-list-item-group multiple>
-                <v-list-item v-for="todoItem in getTodoItemsByPagination" v-bind:key="todoItem.id">
-                    <template v-slot:default="{ active, }">
+            <v-list-item-group>
+                <v-list-item v-for="todoItem in getTodoItemsByPagination" v-bind:key="todoItem.id"
+                    v-bind:class="{ isDone: todoItem.isDone }"
+                    @click="toggleItem({ isDone: todoItem.isDone, todoId: todoItem._id })">
+                    <template>
                         <v-list-item-action>
-                            <v-checkbox :input-value="active" color="primary"></v-checkbox>
+                            <v-list-item-icon>
+                                <v-icon v-if="!todoItem.isDone" aria-hidden="false">mdi-circle</v-icon>
+                                <v-icon v-else aria-hidden="false">mdi-checkbox-marked-circle</v-icon>
+                            </v-list-item-icon>
                         </v-list-item-action>
 
                         <v-list-item-content>
-                            <v-list-item-title>{{ todoItem.title }}</v-list-item-title>
+                            <v-list-item-title>{{ todoItem.title }} || {{ todoItem.isDone }} || {{
+                                getDateFormat(todoItem.startAt)
+                            }} {{ todoItem._id }}</v-list-item-title>
                         </v-list-item-content>
+
+                        <v-list-item-icon v-on:click.stop="deleteTodo(todoItem)">
+                            <v-btn class="ma-2" dark>
+                                <v-icon dark left>
+                                    mdi-minus-circle
+                                </v-icon>DELETE
+                            </v-btn>
+                        </v-list-item-icon>
                     </template>
                 </v-list-item>
             </v-list-item-group>
@@ -43,6 +62,21 @@ export default {
     methods: {
         next(page) {
             this.$store.dispatch('LOAD_TODO_ITEMS_PAGINATION', { page });
+        },
+        getDateFormat(date) {
+            const todoDate = new Date(date);
+            const getYYYYMMDD = todoDate.getFullYear() + "-" + todoDate.getMonth() + 1 + "-" + todoDate.getDate();
+            return getYYYYMMDD;
+        },
+        toggleItem(todoObj) {
+            this.$store.dispatch('UPDATE_ISDONE', todoObj)
+        },
+        deleteTodo(todo) {
+            // TODO: delete 하기 전에 currentDate - startAt dㅣ 66일 이상인지 체크 
+            this.$store.dispatch('DELETE_TODO', { todo });
+        },
+        deleteTodoAll() {
+            this.$store.dispatch('DELETE_TODO_ALL');
         }
     },
     async fetch() {
@@ -53,7 +87,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['getTodoItemsByPagination']),
+        ...mapGetters(['getTodoItemsByPagination', 'getCountTodoItems']),
         ...mapState(['totalPages'])
     }
 

@@ -1,18 +1,21 @@
 <template>
   <div class="pa-5">
-    <p class="error-msg"> {{ this.errorMsg }}</p>
-    <form @submit.prevent="addTodo">
+    <v-alert v-if="this.errorMsg != ''" dense outlined type="error">
+      {{ this.errorMsg }}
+    </v-alert>
+    <form @submit.prevent="addTodo" @keyup.enter="addTodo">
       <v-row>
         <v-col cols="12" sm="8" md="8" class="pt-0 pb-0 mb-3">
-          <v-text-field label="습관으로 만들 행동 무엇인가요?" outlined v-model="todoTitle" hide-details="auto"></v-text-field>
+          <v-text-field label="습관으로 만들 행동 무엇인가요?" outlined v-model="todoTitle" hide-details="auto"
+            ></v-text-field>
         </v-col>
         <v-col cols="12" sm="4" md="4" class="d-flex justify-center align-center pt-0 pb-0 mb-3">
           <client-only>
-          <date-picker v-model="startAt" valueType="format" format="YYYY-MM-DD" input-class="datepicker text-center"
-            placeholder="시작일"></date-picker>
+            <date-picker v-model="startAt" valueType="format" format="YYYY-MM-DD" input-class="datepicker text-center"
+              placeholder="START DATE"></date-picker>
           </client-only>
           <v-btn class="mr-4" @click="addTodo">
-            입력
+            ENTER
           </v-btn>
         </v-col>
       </v-row>
@@ -40,7 +43,7 @@ export default {
       try {
         if (this.todoTitle !== '' && this.todoTitle.trim().length > 0) {
           const newTodoItem = {
-            userId: this.$auth.user.id,
+            userId: this.$store.state.currentUser.id,
             isDone: false,
             title: this.todoTitle.trim(),
             startAt: this.startAt
