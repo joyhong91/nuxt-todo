@@ -26,7 +26,7 @@
 
                 <v-list-item-content>
                     <v-list-item-title v-if="isAuthenticated">
-                        {{ this.$auth.user.name }}
+                        {{ this.$store.state.currentUser.email }}
                     </v-list-item-title>
                     <v-list-item-title v-else>
                         대기업 사장님

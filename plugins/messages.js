@@ -19,9 +19,16 @@ const WELCOME_MESSAGES = [
     "바람이 불지 않으면 노를 저어라. [윈스턴 처칠]",
 ]
 
+export const ALERT_MESSAGES = {
+    DELETEALL: "시작이 반 입니다. 정말 모두 삭제하시겠습니까?",
+    DELETE: "삭제하시겠습니까?",
+    OVER21: "시작한지 21일이 지났습니다. 계속 도전하시는게 어때요?",
+    UNDER21: "일단 목표는 21일까지 꾸준히 해보는게 어때요?", 
+}
 
 export default ({ app }, inject) => {
     // Inject $MSG(msg) in Vue, context and store.
     inject('ERROR', () => {return ERROR})
     inject('WELCOME_MESSAGES', () => {return WELCOME_MESSAGES})
+    inject('ALERT_MESSAGES', () => {return ALERT_MESSAGES})
   }

@@ -58,9 +58,9 @@ exports.postLogin = async (req, res, next) => {
       throw error;
     }
     const token = jwt.sign({ email: loadedUser.email }, "expressnuxtsecret", {
-      expiresIn: "20m",
+      expiresIn: "50m",
     });
-    res.status(200).json({ token: token });
+    res.status(200).json({ token, user });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;

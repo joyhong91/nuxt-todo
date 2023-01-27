@@ -8,7 +8,20 @@
       </v-container>
     </v-main>
 
+    <layouts-footer/>
   </v-app>
 </template>
+
+<script>
+export default {
+  mounted() {
+    if(!this.$store.state.isGuest) {
+      this.$store.commit('setCurrentUser', this.$auth.user);
+    }else { 
+      this.$store.commit('setGuest');
+    }
+  }
+}
+</script>
 
 

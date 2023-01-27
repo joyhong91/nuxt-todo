@@ -4,11 +4,17 @@
             <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
             <v-toolbar-title>JUST DO IT 66DAYS</v-toolbar-title>
+            <v-btn v-if="getCountTodoItems > 0" class="btn-deleteAll mr-4" @click="deleteTodoAll" outlined absolute>
+                DELETE ALL
+            </v-btn>
+
         </v-toolbar>
 
         <v-list>
             <v-list-item-group>
-                <v-list-item v-for="todoItem in getTodoItemsByPagination" v-bind:key="todoItem.id" v-bind:class="{isDone:todoItem.isDone}" @click="toggleItem({ isDone: todoItem.isDone, todoId: todoItem._id })">
+                <v-list-item v-for="todoItem in getTodoItemsByPagination" v-bind:key="todoItem.id"
+                    v-bind:class="{ isDone: todoItem.isDone }"
+                    @click="toggleItem({ isDone: todoItem.isDone, todoId: todoItem._id })">
                     <template>
                         <v-list-item-action>
                             <v-list-item-icon>
@@ -22,6 +28,14 @@
                                 getDateFormat(todoItem.startAt)
                             }} {{ todoItem._id }}</v-list-item-title>
                         </v-list-item-content>
+
+                        <v-list-item-icon v-on:click.stop="deleteTodo(todoItem)">
+                            <v-btn class="ma-2" dark>
+                                <v-icon dark left>
+                                    mdi-minus-circle
+                                </v-icon>DELETE
+                            </v-btn>
+                        </v-list-item-icon>
                     </template>
                 </v-list-item>
             </v-list-item-group>
@@ -55,8 +69,14 @@ export default {
             return getYYYYMMDD;
         },
         toggleItem(todoObj) {
-            console.log(todoObj);
             this.$store.dispatch('UPDATE_ISDONE', todoObj)
+        },
+        deleteTodo(todo) {
+            // TODO: delete 하기 전에 currentDate - startAt dㅣ 66일 이상인지 체크 
+            this.$store.dispatch('DELETE_TODO', { todo });
+        },
+        deleteTodoAll() {
+            this.$store.dispatch('DELETE_TODO_ALL');
         }
     },
     async fetch() {
@@ -67,7 +87,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['getTodoItemsByPagination']),
+        ...mapGetters(['getTodoItemsByPagination', 'getCountTodoItems']),
         ...mapState(['totalPages'])
     }
 
