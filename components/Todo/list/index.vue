@@ -4,6 +4,10 @@
             <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
             <v-toolbar-title>JUST DO IT 66DAYS</v-toolbar-title>
+            <v-btn v-if="getCountTodoItems > 0" class="btn-deleteAll mr-4" @click="deleteTodoAll" outlined absolute>
+                DELETE ALL
+            </v-btn>
+
         </v-toolbar>
 
         <v-list>
@@ -25,7 +29,7 @@
                             }} {{ todoItem._id }}</v-list-item-title>
                         </v-list-item-content>
 
-                        <v-list-item-icon v-on:click.stop="deleteTodo(todoItem._id)">
+                        <v-list-item-icon v-on:click.stop="deleteTodo(todoItem)">
                             <v-btn class="ma-2" dark>
                                 <v-icon dark left>
                                     mdi-minus-circle
@@ -65,13 +69,14 @@ export default {
             return getYYYYMMDD;
         },
         toggleItem(todoObj) {
-            console.log(todoObj);
             this.$store.dispatch('UPDATE_ISDONE', todoObj)
         },
-        deleteTodo(todoId) {
-            console.log("delete Todo  vue ");
-            console.log(todoId);
-            this.$store.dispatch('DELETE_TODO', { todoId });
+        deleteTodo(todo) {
+            // TODO: delete 하기 전에 currentDate - startAt dㅣ 66일 이상인지 체크 
+            this.$store.dispatch('DELETE_TODO', { todo });
+        },
+        deleteTodoAll() {
+            this.$store.dispatch('DELETE_TODO_ALL');
         }
     },
     async fetch() {
@@ -82,7 +87,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['getTodoItemsByPagination']),
+        ...mapGetters(['getTodoItemsByPagination', 'getCountTodoItems']),
         ...mapState(['totalPages'])
     }
 

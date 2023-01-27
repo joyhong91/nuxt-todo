@@ -59,28 +59,32 @@ export const mutations = {
   },
   deleteTodo(state, todo) {
     const todoItem = state.todoItems.find(item => item._id === todo._id);
-    const index =  state.todoItems.indexOf(todoItem);
+    const targetIndex = state.todoItems.indexOf(todoItem);
 
-    state.todoItems.splice(index, 1);
+    state.todoItems.splice(targetIndex, 1);
+  },
+  deleteAll(state) {
+    state.todoItems = [];
   }
 }
 
 
 //actions 비동기 로직 
 export const actions = {
-  // state.auth.user.id
   async LOAD_TODO_ITEMS({ commit }) {
     const user = Object.keys(this.state.currentUser).length === 0 ? this.$auth.user : this.state.currentUser;
-    await this.$axios.$get("/getTodosByUserId", {
+    const response = await this.$axios.$get("/getTodosByUserId", {
       params: { userId: user.id }
-    }).then(result => {
-      commit('setTodoItems', result.todoItems);
     });
+
+    commit('setTodoItems', response.todoItems);
     commit('setTodoItemsPagination');
   },
+
   async ADD_NEW_ITEM({ commit }, { todoItem }) {
     const response = await this.$axios.$post("/addTodo", todoItem);
     commit('setTodoItem', response.todoItem);
+    commit('setTodoItemsPagination');
   },
 
   LOAD_TODO_ITEMS_PAGINATION({ commit }, { page }) {
@@ -92,16 +96,57 @@ export const actions = {
     commit('updateIsDone', response.data.result);
   },
 
-  async DELETE_TODO({ commit }, { todoId }) {
-    console.log("DELETE_TODO");
-    console.log(todoId);
+  async DELETE_TODO({ commit }, { todo }) {
+    const diffDays = calDiffDays(todo.startAt);
+    const alertDesc = confirmMessages(diffDays, this.$ALERT_MESSAGES());
+
+    if (!confirm(alertDesc)) {
+      return false;
+    }
+
     const response = await this.$axios.$delete("/deleteTodoById", {
-      params: { _id: todoId }
+      params: { _id: todo._id }
     });
-    console.log(response);
     commit('deleteTodo', response.deletedTodo);
+  },
+
+  DELETE_TODO_ALL({ commit }) {
+    if(!confirm(this.$ALERT_MESSAGES().DELETEALL)) {
+      return false;
+    }
+
+    const todoArr = [];
+    this.state.todoItems.map(item => {
+      todoArr.push(item._id);
+    })
+    
+    this.$axios.$delete("/deleteMany", {
+      params: { ids: todoArr }
+    });
+    
+    commit('deleteAll');
+    commit('setTodoItemsPagination');
   }
 
 
 }
 
+//store.js 내부 함수 
+const calDiffDays = (startAt) => {
+  const currentDate = new Date();
+  const todoStartAt = new Date(startAt);
+  const diffDate = currentDate - todoStartAt;
+  const diffDays = diffDate / (1000 * 3600 * 24);
+
+  return Math.floor(diffDays);
+}
+
+const confirmMessages = (diffDays, messages) => {
+  if (diffDays < 21) {
+    return messages.UNDER21;
+  } else if (diffDays >= 21 && diffDays < 66) {
+    return messages.OVER21;
+  } else {
+    return messages.DELETE;
+  }
+}

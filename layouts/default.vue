@@ -8,6 +8,7 @@
       </v-container>
     </v-main>
 
+    <layouts-footer/>
   </v-app>
 </template>
 

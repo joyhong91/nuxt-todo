@@ -84,5 +84,24 @@ exports.deleteTodoById = async (req, res, next) => {
         }
         next(err);
     }
+};
+
+exports.deleteMany = async (req, res, next) => {
+    const todoIds = req.query.ids;
+
+    try {
+        const deletedTodos = await todoModel.deleteMany({_id: todoIds});
+        
+        res.status(200).json({
+            message: "success delete many todo",
+            deletedTodo: deletedTodos
+        });
+
+    } catch (err) {
+        if (!err.statusCode) {
+            err.statusCode = 500;
+        }
+        next(err);
+    }
 }
 
