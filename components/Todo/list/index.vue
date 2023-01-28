@@ -1,8 +1,6 @@
 <template>
     <v-card class="mx-auto">
         <v-toolbar color="teal">
-            <v-app-bar-nav-icon></v-app-bar-nav-icon>
-
             <v-toolbar-title>
                 <v-btn  class="ma-1" color="white" plain @click="filter({isDone: false})" :class="{active: todoBtnActive}">
                     TODO
