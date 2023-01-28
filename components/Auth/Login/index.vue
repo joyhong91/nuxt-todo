@@ -80,10 +80,7 @@ export default {
 
         const user = response.data.user;
         
-        this.$store.commit('setCurrentUser', {
-          id: user._id,
-          ...user
-        });
+        this.$store.commit('setCurrentUser', user);
 
       } catch (err) {
         this.errorMsg = this.$ERROR().LOGIN;
