@@ -14,8 +14,9 @@
 
 <script>
 export default {
-  mounted() {
-    if(!this.$store.state.isGuest) {
+  
+  fetch() {
+    if(this.$auth.user) {
       this.$store.commit('setCurrentUser', this.$auth.user);
     }else { 
       this.$store.commit('setGuest');
