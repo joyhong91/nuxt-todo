@@ -14,8 +14,7 @@
 
 <script>
 export default {
-  
-  fetch() {
+  created() {
     if(this.$auth.user) {
       this.$store.commit('setCurrentUser', this.$auth.user);
     }else { 
