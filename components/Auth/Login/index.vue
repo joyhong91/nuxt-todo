@@ -78,6 +78,13 @@ export default {
         });
         this.$router.push("/");
 
+        const user = response.data.user;
+        
+        this.$store.commit('setCurrentUser', {
+          id: user._id,
+          ...user
+        });
+
       } catch (err) {
         this.errorMsg = this.$ERROR().LOGIN;
         console.log(err);

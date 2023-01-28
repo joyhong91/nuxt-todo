@@ -51,6 +51,9 @@ export const mutations = {
     }
     state.isGuest = true;
   },
+  setEmptyCurrentUser(state ) {
+    state.currentUser = {};
+  },
   setTodoItemsPagination(state, page) {
     const currentPage = page ? page : 1;
     state.pageStartOffset = (currentPage - 1) * state.itemsPerPage;
@@ -77,6 +80,8 @@ export const mutations = {
 //actions 비동기 로직 
 export const actions = {
   async LOAD_TODO_ITEMS({ commit }) {
+    console.log("LOAD_TODO_ITEMS");
+    console.log(this.state.currentUser);
     const response = await this.$axios.$get("/getTodosByUserId", {
       params: { userId: this.state.currentUser.id }
     });
