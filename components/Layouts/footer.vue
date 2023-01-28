@@ -1,11 +1,7 @@
 <template>
-    <v-footer dark padless>
-        <v-card class="flex" flat tile>
-            <v-card-title class="teal">
-                <strong class="subheading">Get connected with us on social networks!</strong>
-
-                <v-spacer></v-spacer>
-
+    <v-footer padless>
+        <v-card class="d-block w-100" flat tile>
+            <v-card-title class="justify-center">
                 <v-btn v-for="icon in icons" :key="icon" class="mx-4" dark icon>
                     <v-icon size="24px">
                         {{ icon }}

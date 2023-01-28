@@ -3,7 +3,9 @@
         <v-toolbar color="teal">
             <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
-            <v-toolbar-title>JUST DO IT 66DAYS</v-toolbar-title>
+            <v-toolbar-title>
+                <p class="mb-0">JUST DO IT 66DAYS</p>
+            </v-toolbar-title>
             <v-btn v-if="getCountTodoItems > 0" class="btn-deleteAll mr-4" @click="deleteTodoAll" outlined absolute>
                 DELETE ALL
             </v-btn>
@@ -16,7 +18,7 @@
                     v-bind:class="{ isDone: todoItem.isDone }"
                     @click="toggleItem({ isDone: todoItem.isDone, todoId: todoItem._id })">
                     <template>
-                        <v-list-item-action>
+                        <v-list-item-action class="mr-2">
                             <v-list-item-icon>
                                 <v-icon v-if="!todoItem.isDone" aria-hidden="false">mdi-circle</v-icon>
                                 <v-icon v-else aria-hidden="false">mdi-checkbox-marked-circle</v-icon>
