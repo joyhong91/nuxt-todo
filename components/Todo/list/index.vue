@@ -4,7 +4,12 @@
             <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
             <v-toolbar-title>
-                <p class="mb-0">JUST DO IT 66DAYS</p>
+                <v-btn  class="ma-1" color="white" plain @click="filter({isDone: false})">
+                    TODO
+                </v-btn>
+                <v-btn  class="ma-1" color="darkgrey" plain @click="filter({isDone: true})">
+                    DONE
+                </v-btn>
             </v-toolbar-title>
             <v-btn v-if="getCountTodoItems > 0" class="btn-deleteAll mr-4" @click="deleteTodoAll" outlined absolute>
                 DELETE ALL
@@ -79,6 +84,9 @@ export default {
         },
         deleteTodoAll() {
             this.$store.dispatch('DELETE_TODO_ALL');
+        },
+        filter(flag) {
+            this.$store.dispatch('FILTER_TODO_ITEMS', { flag })
         }
     },
     async fetch() {

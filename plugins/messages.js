@@ -22,8 +22,8 @@ const WELCOME_MESSAGES = [
 export const ALERT_MESSAGES = {
     DELETEALL: "시작이 반 입니다. 정말 모두 삭제하시겠습니까?",
     DELETE: "삭제하시겠습니까?",
-    OVER21: "시작한지 21일이 지났습니다. 계속 도전하시는게 어때요?",
-    UNDER21: "일단 목표는 21일까지 꾸준히 해보는게 어때요?", 
+    OVER21: "시작한지 21일이 지났습니다. 계속 도전하시는게 어때요? [확인]을 누르시면 삭제됩니다.",
+    UNDER21: "일단 목표는 21일까지 꾸준히 해보는게 어때요? [확인]을 누르시면 삭제됩니다.", 
 }
 
 export default ({ app }, inject) => {

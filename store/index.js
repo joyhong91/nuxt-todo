@@ -80,11 +80,15 @@ export const mutations = {
 //actions 비동기 로직 
 export const actions = {
   async LOAD_TODO_ITEMS({ commit }) {
-    console.log("LOAD_TODO_ITEMS");
-    console.log(this.state.currentUser);
     const response = await this.$axios.$get("/getTodosByUserId", {
       params: { userId: this.state.currentUser.id }
     });
+    // const passedTodoArr = [];
+    // response.todoItems.map(item => {
+    //   if(calDiffDays(item.startAt) < 66) {
+    //     passedTodoArr.push(item);
+    //   }
+    // })
 
     commit('setTodoItems', response.todoItems);
     commit('setTodoItemsPagination');
@@ -135,12 +139,27 @@ export const actions = {
     
     commit('deleteAll');
     commit('setTodoItemsPagination');
+  },
+  async FILTER_TODO_ITEMS({ commit }, { flag }) {
+    const response = await this.$axios.$get("/getTodosByUserId", {
+      params: { userId: this.state.currentUser.id, ...flag }
+    });
+
+    commit('setTodoItems', response.todoItems);
+    commit('setTodoItemsPagination');
   }
 
 
 }
 
-//store.js 내부 함수 
+//store.js 내부 함수
+const sixtysixDaysAgo = () => {
+  const today = new Date();
+  const twoMonthAgo = new Date(today.setMonth(today.getMonth() - 2));
+
+  return new Date(twoMonthAgo.setDate(twoMonthAgo.getDate() - 6));
+} 
+
 const calDiffDays = (startAt) => {
   const currentDate = new Date();
   const todoStartAt = new Date(startAt);

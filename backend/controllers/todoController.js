@@ -28,10 +28,10 @@ exports.addTodo = async (req, res, next) => {
 
 exports.getTodosByUserId = async (req, res, next) => {
     
-    const { userId } = req.query;
-
+    const { userId, isDone } = req.query;
+    const condition = isDone ? { userId, isDone } : { userId };
     try {
-        const todoList = await todoModel.find({ "userId": userId }).sort({createdAt: -1});
+        const todoList = await todoModel.find(condition).sort({createdAt: -1});
 
         res.status(200).json({
             message: "success load todo list",
