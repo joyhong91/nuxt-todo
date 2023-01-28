@@ -144,7 +144,9 @@ footer {
         button {
             font-size: 1.1rem;
             padding: 0 !important;
-    
+            &.active {
+                text-decoration: underline;
+            }
             &:first-child::after {
                 content: '';
                 border-right: 2px solid $white-color;

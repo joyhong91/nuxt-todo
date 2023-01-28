@@ -4,10 +4,10 @@
             <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
             <v-toolbar-title>
-                <v-btn  class="ma-1" color="white" plain @click="filter({isDone: false})">
+                <v-btn  class="ma-1" color="white" plain @click="filter({isDone: false})" :class="{active: todoBtnActive}">
                     TODO
                 </v-btn>
-                <v-btn  class="ma-1" color="darkgrey" plain @click="filter({isDone: true})">
+                <v-btn  class="ma-1" color="darkgrey" plain @click="filter({isDone: true})" :class="{active: doneBtnActive}">
                     DONE
                 </v-btn>
             </v-toolbar-title>
@@ -63,7 +63,9 @@ import { mapState, mapGetters } from 'vuex'
 export default {
     data() {
         return {
-            page: 1
+            page: 1,
+            todoBtnActive: false,
+            doneBtnActive: false
         }
     },
     methods: {
@@ -86,7 +88,19 @@ export default {
             this.$store.dispatch('DELETE_TODO_ALL');
         },
         filter(flag) {
-            this.$store.dispatch('FILTER_TODO_ITEMS', { flag })
+            if(flag.isDone) {
+                this.doneBtnActive = !this.doneBtnActive
+                this.todoBtnActive = this.todoBtnActive ? false: this.todoBtnActive
+            } else {
+                this.todoBtnActive = !this.todoBtnActive
+                this.doneBtnActive = this.doneBtnActive ? false: this.doneBtnActive
+            }
+
+            if(!this.todoBtnActive && !this.doneBtnActive) {
+                this.$store.dispatch('LOAD_TODO_ITEMS');
+            }else {
+                this.$store.dispatch('FILTER_TODO_ITEMS', { flag })
+            }
         }
     },
     async fetch() {
