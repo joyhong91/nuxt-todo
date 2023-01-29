@@ -103,6 +103,7 @@ export default {
     },
     async fetch() {
         try {
+            
             await this.$store.dispatch('LOAD_TODO_ITEMS');
         } catch (err) {
             console.log(err);

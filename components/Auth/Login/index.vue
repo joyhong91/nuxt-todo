@@ -81,6 +81,7 @@ export default {
         const user = response.data.user;
         
         this.$store.commit('setCurrentUser', user);
+        this.$store.commit('setVisitLog', user);
 
       } catch (err) {
         this.errorMsg = this.$ERROR().LOGIN;

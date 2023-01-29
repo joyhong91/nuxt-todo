@@ -14,7 +14,7 @@
             <date-picker v-model="startAt" valueType="format" format="YYYY-MM-DD" input-class="datepicker text-center"
               placeholder="START DATE"></date-picker>
           </client-only>
-          <v-btn class="mr-4" @click="addTodo">
+          <v-btn class="ml-2" @click="addTodo">
             ENTER
           </v-btn>
         </v-col>
@@ -43,7 +43,7 @@ export default {
       try {
         if (this.todoTitle !== '' && this.todoTitle.trim().length > 0) {
           const newTodoItem = {
-            userId: this.$store.state.currentUser.id,
+            userId: this.$store.state.getters.getCurrentUser.id,
             isDone: false,
             title: this.todoTitle.trim(),
             startAt: this.startAt

@@ -1,5 +1,5 @@
 <template>
-    <v-footer padless>
+    <v-footer padless class="mt-10">
         <v-card class="d-block w-100" flat tile>
             <v-card-title class="justify-center">
 
@@ -21,7 +21,7 @@
 export default {
     data: () => ({
         footerData: [
-            { icon: 'mdi-mail', link: 'https://github.com/joyhong91/nuxt-todo' },
+            { icon: 'mdi-mail', link: 'mailto:remonkp@gmail.com' },
             { icon: 'mdi-github', link: 'https://github.com/joyhong91/nuxt-todo' },
             { icon: 'mdi-instagram', link: 'https://www.instagram.com/joy._.hong' }
         ],

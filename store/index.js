@@ -15,6 +15,9 @@ export const getters = {
   getUserInfo(state) {
     return state.auth.user;
   },
+  getCurrentUser(state) {
+    return state.currentUser;
+  },
   getTodoItems(state) {
     return state.todoItems;
   },
@@ -147,8 +150,7 @@ export const actions = {
 
     commit('setTodoItems', response.todoItems);
     commit('setTodoItemsPagination');
-  }
-
+  },
 
 }
 
