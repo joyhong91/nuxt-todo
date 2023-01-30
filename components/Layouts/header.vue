@@ -102,7 +102,6 @@ export default {
         async logout() {
             await this.$auth.logout();
             this.$store.commit('setEmptyCurrentUser');
-            localStorage.removeItem('visitLog');
             this.$router.push("/");
 
         }

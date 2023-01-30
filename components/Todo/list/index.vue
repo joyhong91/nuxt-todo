@@ -2,11 +2,17 @@
     <v-card class="mx-auto">
         <v-toolbar color="teal">
             <v-toolbar-title>
-                <v-btn  class="ma-1" color="white" plain @click="filter({isDone: false})" :class="{active: todoBtnActive}">
+                <v-btn class="ma-1" color="white" plain @click="filterItems({ status: 'todo' })"
+                    :class="{active: todoBtnActive}">
                     TODO
                 </v-btn>
-                <v-btn  class="ma-1" color="darkgrey" plain @click="filter({isDone: true})" :class="{active: doneBtnActive}">
+                <v-btn class="ma-1" color="darkgrey" plain @click="filterItems({ status: 'done' })"
+                    :class="{ active: doneBtnActive }">
                     DONE
+                </v-btn>
+                <v-btn class="ma-1" color="white" plain @click="filterItems({ status: 'all' })"
+                    :class="{ active: allBtnActive }">
+                    ALL
                 </v-btn>
             </v-toolbar-title>
             <v-btn v-if="getCountTodoItems > 0" class="btn-deleteAll mr-4" @click="deleteTodoAll" outlined absolute>
@@ -19,7 +25,7 @@
             <v-list-item-group>
                 <v-list-item v-for="todoItem in getTodoItemsByPagination" v-bind:key="todoItem.id"
                     v-bind:class="{ isDone: todoItem.isDone }"
-                    @click="toggleItem({ isDone: todoItem.isDone, todoId: todoItem._id })">
+                    @click="toggleItem({ isDone: todoItem.isDone, todoId: todoItem._id })" :disabled="checkedDisabled(todoItem.startAt, todoItem.isDone)">
                     <template>
                         <v-list-item-action class="mr-2">
                             <v-list-item-icon>
@@ -29,9 +35,9 @@
                         </v-list-item-action>
 
                         <v-list-item-content>
-                            <v-list-item-title>{{ todoItem.title }} || {{ todoItem.isDone }} || {{
+                            <v-list-item-title>{{ todoItem.title}} || {{ todoItem.isDone }} || {{
                                 getDateFormat(todoItem.startAt)
-                            }} {{ todoItem._id }}</v-list-item-title>
+                            }}</v-list-item-title>
                         </v-list-item-content>
 
                         <v-list-item-icon v-on:click.stop="deleteTodo(todoItem)">
@@ -62,18 +68,17 @@ export default {
     data() {
         return {
             page: 1,
-            todoBtnActive: false,
-            doneBtnActive: false
+            todoBtnActive: true,
+            doneBtnActive: false,
+            allBtnActive: false
         }
+    },
+    created() {
+        this.$root.$refs.list = this;
     },
     methods: {
         next(page) {
             this.$store.dispatch('LOAD_TODO_ITEMS_PAGINATION', { page });
-        },
-        getDateFormat(date) {
-            const todoDate = new Date(date);
-            const getYYYYMMDD = todoDate.getFullYear() + "-" + todoDate.getMonth() + 1 + "-" + todoDate.getDate();
-            return getYYYYMMDD;
         },
         toggleItem(todoObj) {
             this.$store.dispatch('UPDATE_ISDONE', todoObj)
@@ -85,33 +90,53 @@ export default {
         deleteTodoAll() {
             this.$store.dispatch('DELETE_TODO_ALL');
         },
-        filter(flag) {
-            if(flag.isDone) {
-                this.doneBtnActive = !this.doneBtnActive
-                this.todoBtnActive = this.todoBtnActive ? false: this.todoBtnActive
-            } else {
+        filterItems({ status }) {
+            let currentFilter = {};
+            this.todoBtnActive = false;
+            this.doneBtnActive = false;
+            this.allBtnActive = false;
+
+            if (status === 'todo') {
                 this.todoBtnActive = !this.todoBtnActive
-                this.doneBtnActive = this.doneBtnActive ? false: this.doneBtnActive
+                currentFilter = { isDone: false }
+            } else if (status === 'done') {
+                this.doneBtnActive = !this.doneBtnActive
+                currentFilter = { isDone: true }
+            } else {
+                this.allBtnActive = !this.allBtnActive;
             }
 
-            if(!this.todoBtnActive && !this.doneBtnActive) {
-                this.$store.dispatch('LOAD_TODO_ITEMS');
-            }else {
-                this.$store.dispatch('FILTER_TODO_ITEMS', { flag })
-            }
-        }
+            this.$store.dispatch('LOAD_TODO_ITEMS', currentFilter);
+
+        },
+        checkedDisabled(startAt, isDone) {
+            const prevDate = new Date(this.getDateFormat(this.getPrevDate()));
+            const today = new Date(this.getDateFormat());
+            const startDate = new Date(startAt);
+
+            return prevDate > startDate || ( prevDate <= startDate && startDate < today && !isDone)
+        },
+        getPrevDate() {
+            const today = new Date();
+            const twoMonthAgo = new Date(today.setMonth(today.getMonth() - 2));
+
+            return twoMonthAgo.setDate(twoMonthAgo.getDate() - 6);
+        },
+        getDateFormat(date) {
+            const todoDate = date ? new Date(date) : new Date();
+            return `${todoDate.getFullYear()}-${todoDate.getMonth()+1}-${todoDate.getDate()}`;
+        },
     },
     async fetch() {
         try {
-            
-            await this.$store.dispatch('LOAD_TODO_ITEMS');
+            await this.$store.dispatch('LOAD_TODO_ITEMS', { isDone: false });
         } catch (err) {
             console.log(err);
         }
     },
     computed: {
         ...mapGetters(['getTodoItemsByPagination', 'getCountTodoItems']),
-        ...mapState(['totalPages'])
+        ...mapState(['totalPages']),
     }
 
 };

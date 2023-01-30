@@ -19,11 +19,17 @@ const WELCOME_MESSAGES = [
     "바람이 불지 않으면 노를 저어라. [윈스턴 처칠]",
 ]
 
-export const ALERT_MESSAGES = {
+const ALERT_MESSAGES = {
     DELETEALL: "시작이 반 입니다. 정말 모두 삭제하시겠습니까?",
     DELETE: "삭제하시겠습니까?",
     OVER21: "시작한지 21일이 지났습니다. 계속 도전하시는게 어때요? [확인]을 누르시면 삭제됩니다.",
     UNDER21: "일단 목표는 21일까지 꾸준히 해보는게 어때요? [확인]을 누르시면 삭제됩니다.", 
+    
+}
+
+const INPUT = {
+    TITLE_PLACEHOLDER: "습관으로 만들 것을 입력해보세요 :)",
+    DATE_PLACEHOLDER: "START DATE"
 }
 
 export default ({ app }, inject) => {
@@ -31,4 +37,5 @@ export default ({ app }, inject) => {
     inject('ERROR', () => {return ERROR})
     inject('WELCOME_MESSAGES', () => {return WELCOME_MESSAGES})
     inject('ALERT_MESSAGES', () => {return ALERT_MESSAGES})
+    inject('INPUT', () => {return INPUT})
   }

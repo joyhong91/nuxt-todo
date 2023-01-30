@@ -6,13 +6,13 @@
     <form @submit.prevent="addTodo" @keyup.enter="addTodo">
       <v-row>
         <v-col cols="12" sm="8" md="8" class="pt-0 pb-0 mb-3">
-          <v-text-field label="습관으로 만들 행동 무엇인가요?" outlined v-model="todoTitle" hide-details="auto"
+          <v-text-field :label="this.$INPUT().TITLE_PLACEHOLDER" outlined v-model="todoTitle" hide-details="auto"
             ></v-text-field>
         </v-col>
         <v-col cols="12" sm="4" md="4" class="d-flex justify-center align-center pt-0 pb-0 mb-3">
           <client-only>
             <date-picker v-model="startAt" valueType="format" format="YYYY-MM-DD" input-class="datepicker text-center"
-              placeholder="START DATE"></date-picker>
+              :placeholder="this.$INPUT().DATE_PLACEHOLDER"></date-picker>
           </client-only>
           <v-btn class="ml-2" @click="addTodo">
             ENTER
@@ -41,9 +41,11 @@ export default {
   methods: {
     async addTodo() {
       try {
+        console.log(this.todoTitle);
+        console.log(this.todoTitle.trim().length);
         if (this.todoTitle !== '' && this.todoTitle.trim().length > 0) {
           const newTodoItem = {
-            userId: this.$store.state.getters.getCurrentUser.id,
+            userId: this.$store.getters.getCurrentUser.id,
             isDone: false,
             title: this.todoTitle.trim(),
             startAt: this.startAt
@@ -60,6 +62,7 @@ export default {
     },
     clearInputBox() {
       this.todoTitle = "";
+      this.startAt = new Date();
     }
   }
 };

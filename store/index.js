@@ -1,3 +1,4 @@
+
 export const state = () => ({
   isGuest: false,
   currentUser: {},
@@ -82,16 +83,18 @@ export const mutations = {
 
 //actions 비동기 로직 
 export const actions = {
-  async LOAD_TODO_ITEMS({ commit }) {
+  async LOAD_TODO_ITEMS({ commit }, {isDone}) {
     const response = await this.$axios.$get("/getTodosByUserId", {
-      params: { userId: this.state.currentUser.id }
+      params: { userId: this.getters.getCurrentUser.id, isDone }
     });
-    // const passedTodoArr = [];
-    // response.todoItems.map(item => {
-    //   if(calDiffDays(item.startAt) < 66) {
-    //     passedTodoArr.push(item);
-    //   }
-    // })
+
+    commit('setTodoItems', response.todoItems);
+    commit('setTodoItemsPagination');
+  },
+  async LOAD_TODO_VALID_ITEMS({ commit }) {
+    const response = await this.$axios.$get("/getTodosByUserId", {
+      params: { userId: this.getters.getCurrentUser.id }
+    });
 
     commit('setTodoItems', response.todoItems);
     commit('setTodoItemsPagination');
@@ -143,24 +146,11 @@ export const actions = {
     commit('deleteAll');
     commit('setTodoItemsPagination');
   },
-  async FILTER_TODO_ITEMS({ commit }, { flag }) {
-    const response = await this.$axios.$get("/getTodosByUserId", {
-      params: { userId: this.state.currentUser.id, ...flag }
-    });
-
-    commit('setTodoItems', response.todoItems);
-    commit('setTodoItemsPagination');
-  },
+  
 
 }
 
 //store.js 내부 함수
-const sixtysixDaysAgo = () => {
-  const today = new Date();
-  const twoMonthAgo = new Date(today.setMonth(today.getMonth() - 2));
-
-  return new Date(twoMonthAgo.setDate(twoMonthAgo.getDate() - 6));
-} 
 
 const calDiffDays = (startAt) => {
   const currentDate = new Date();

@@ -123,6 +123,15 @@ footer {
             text-decoration: line-through;
         }
     }
+    &.v-list-item--disabled {
+        opacity: 0.6;
+        .v-list-item__content>.v-list-item__title {
+            text-decoration: line-through;
+        }
+        .v-list-item__icon {
+            opacity: 0.3;
+        }
+    }
 
 }
 
@@ -147,11 +156,14 @@ footer {
             &.active {
                 text-decoration: underline;
             }
-            &:first-child::after {
+            &::after {
                 content: '';
                 border-right: 2px solid $white-color;
                 height: 20px;
                 margin-left: 10px;
+            }
+            &:last-child::after {
+                border-right: 0px;
             }
         }
     }
