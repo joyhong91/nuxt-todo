@@ -37,7 +37,7 @@ $dark_red: #903749;
 $darkest_red: #53354A;
 $green_dark0: #F3EFE0;
 $white-color: #f3f3f3;
-$bg-bl-op4: rgba(0,0,0, 0.4);
+$bg-bl-op4: rgba(0, 0, 0, 0.4);
 
 
 body {
@@ -46,6 +46,7 @@ body {
 
 header {
     overflow: hidden;
+
     .v-list-item__icon {
         &:first-child {
             position: absolute;
@@ -58,17 +59,19 @@ header {
             border-radius: 6px;
         }
 
-        
+
     }
+
     .v-image {
         .v-responsive__sizer {
             background-color: $bg-bl-op4;
         }
-        .v-image__image{
+
+        .v-image__image {
             background-position-y: 88% !important;
         }
     }
-    
+
 
     .app-name--wrap {
         display: block;
@@ -77,14 +80,15 @@ header {
         margin: 0;
         margin-top: 15px;
 
-        > a {
+        >a {
             font-family: "KOTRA_BOLD-Bold";
             display: block;
             color: $white-color;
             text-decoration: none;
             font-size: 2.8rem;
         }
-        > p {
+
+        >p {
             color: $white-color;
             font-size: 0.8rem;
         }
@@ -99,7 +103,7 @@ footer {
 
 
 .message--wrap {
-    font-size:0.8rem;
+    font-size: 0.8rem;
 }
 
 .count--wrap {
@@ -110,15 +114,25 @@ footer {
         font-size: 0.9rem;
     }
 }
+
 .v-list-item {
     &.isDone {
         opacity: 0.4;
 
-        .v-list-item__content > .v-list-item__title {
+        .v-list-item__content>.v-list-item__title {
             text-decoration: line-through;
         }
     }
-    
+    &.v-list-item--disabled {
+        opacity: 0.6;
+        .v-list-item__content>.v-list-item__title {
+            text-decoration: line-through;
+        }
+        .v-list-item__icon {
+            opacity: 0.3;
+        }
+    }
+
 }
 
 .btn-deleteAll {
@@ -132,12 +146,35 @@ footer {
     text-decoration: none;
 }
 
+.v-toolbar__content {
+    .v-toolbar__title {
+        padding-left: 10px !important;
+
+        button {
+            font-size: 1.1rem;
+            padding: 0 !important;
+            &.active {
+                text-decoration: underline;
+            }
+            &::after {
+                content: '';
+                border-right: 2px solid $white-color;
+                height: 20px;
+                margin-left: 10px;
+            }
+            &:last-child::after {
+                border-right: 0px;
+            }
+        }
+    }
+}
+
 .mx-datepicker {
     width: 100% !important;
 }
 
 .mx-input-wrapper {
-    border: 1px solid rgba(256,256,256,0.2);
+    border: 1px solid rgba(256, 256, 256, 0.2);
     border-radius: 3px;
     max-width: 230px;
     padding: 5px;
