@@ -1,3 +1,4 @@
+
 export const state = () => ({
   isGuest: false,
   currentUser: {},
@@ -14,6 +15,9 @@ export const getters = {
   },
   getUserInfo(state) {
     return state.auth.user;
+  },
+  getCurrentUser(state) {
+    return state.currentUser;
   },
   getTodoItems(state) {
     return state.todoItems;
@@ -79,11 +83,17 @@ export const mutations = {
 
 //actions 비동기 로직 
 export const actions = {
-  async LOAD_TODO_ITEMS({ commit }) {
-    console.log("LOAD_TODO_ITEMS");
-    console.log(this.state.currentUser);
+  async LOAD_TODO_ITEMS({ commit }, {isDone}) {
     const response = await this.$axios.$get("/getTodosByUserId", {
-      params: { userId: this.state.currentUser.id }
+      params: { userId: this.getters.getCurrentUser.id, isDone }
+    });
+
+    commit('setTodoItems', response.todoItems);
+    commit('setTodoItemsPagination');
+  },
+  async LOAD_TODO_VALID_ITEMS({ commit }) {
+    const response = await this.$axios.$get("/getTodosByUserId", {
+      params: { userId: this.getters.getCurrentUser.id }
     });
 
     commit('setTodoItems', response.todoItems);
@@ -135,12 +145,13 @@ export const actions = {
     
     commit('deleteAll');
     commit('setTodoItemsPagination');
-  }
-
+  },
+  
 
 }
 
-//store.js 내부 함수 
+//store.js 내부 함수
+
 const calDiffDays = (startAt) => {
   const currentDate = new Date();
   const todoStartAt = new Date(startAt);

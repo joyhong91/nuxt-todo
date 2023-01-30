@@ -1,7 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const users = require('./userModel');
 
 const TodoSchema = new Schema(
   {
