@@ -68,16 +68,17 @@ export default {
 
       try {
         if (this.checkFormValidate()) {
-          const user = await this.$axios.$post("/api/auth/signin", {
+          const response = await this.$axios.$post("/api/auth/signin", {
             name: this.name,
             email: this.email,
             password: this.password
           });
+          console.log(response.user);
+          await this.$store.dispatch('CREATE_POINT', response.user);
           this.$router.push("/");
         } else {
           return false
         }
-
       } catch (err) {
         console.log(err);
         this.errorMsg = this.$ERROR().REGISTER

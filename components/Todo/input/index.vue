@@ -41,8 +41,6 @@ export default {
   methods: {
     async addTodo() {
       try {
-        console.log(this.todoTitle);
-        console.log(this.todoTitle.trim().length);
         if (this.todoTitle !== '' && this.todoTitle.trim().length > 0) {
           const newTodoItem = {
             userId: this.$store.getters.getCurrentUser.id,

@@ -8,6 +8,4 @@ router.patch("/updateIsDone", todoController.updateIsDone);
 router.delete("/deleteTodoById", todoController.deleteTodoById);
 router.delete("/deleteMany", todoController.deleteMany);
 
-// router.get("/user", isAuth, authController.getUser);
-
 module.exports = router;

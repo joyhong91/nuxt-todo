@@ -130,6 +130,7 @@ export default {
     async fetch() {
         try {
             await this.$store.dispatch('LOAD_TODO_ITEMS', { isDone: false });
+            await this.$store.dispatch('LOAD_POINT');
         } catch (err) {
             console.log(err);
         }

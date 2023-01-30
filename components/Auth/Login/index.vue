@@ -44,8 +44,8 @@ export default {
   },
   data() {
     return {
-      email: 'test@test.com',
-      password: 'test123',
+      email: 'test1234@test.com',
+      password: 'test1234',
       errorMsg: '',
       show1: false,
       rules: {
@@ -76,12 +76,12 @@ export default {
         const response = await this.$auth.loginWith("local", {
           data: { email: this.email, password: this.password }
         });
-        this.$router.push("/");
 
         const user = response.data.user;
         
         this.$store.commit('setCurrentUser', user);
-
+        this.$store.dispatch('LOAD_POINT');
+        this.$router.push("/");
       } catch (err) {
         this.errorMsg = this.$ERROR().LOGIN;
         console.log(err);
