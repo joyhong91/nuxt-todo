@@ -32,9 +32,12 @@
                     <v-list-item-title v-else>
                         대기업 사장님
                     </v-list-item-title>
+                    <v-list-item-title class="text-right">
+                    [ {{this.$store.getters.getPoint.amount}}p ]
+                    </v-list-item-title>
                 </v-list-item-content>
+                
             </v-list-item>
-
             <v-divider></v-divider>
 
             <v-list flat v-if="isAuthenticated">
