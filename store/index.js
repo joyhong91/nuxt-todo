@@ -7,6 +7,7 @@ export const state = () => ({
   pageStartOffset: 0,
   pageEndOffset: 0,
   totalPages: 0,
+  point: {}
 })
 
 export const getters = {
@@ -30,6 +31,9 @@ export const getters = {
   },
   getCountDoneItems(state) {
     return state.todoItems.filter(todo => todo.isDone).length;
+  },
+  getPoint(state) {
+    return state.point;
   }
 
 };
@@ -77,12 +81,28 @@ export const mutations = {
   },
   deleteAll(state) {
     state.todoItems = [];
+  },
+  setPoint(state, point) {
+    state.point = point;
   }
 }
 
 
 //actions 비동기 로직 
 export const actions = {
+  async CREATE_POINT( { commit }, user) {
+    const response = await this.$axios.$post("/createPoint", {userId: user.id});
+
+    commit('setPoint', response.point);
+  },
+  async LOAD_POINT({ commit }) {
+    const user = this.getters.getCurrentUser;
+    const response = await this.$axios.$get('/getPointByUserId', {
+        params: {userId: user.id}
+    })
+
+    commit('setPoint', response.point[0]);
+  },  
   async LOAD_TODO_ITEMS({ commit }, {isDone}) {
     const response = await this.$axios.$get("/getTodosByUserId", {
       params: { userId: this.getters.getCurrentUser.id, isDone }
@@ -100,19 +120,26 @@ export const actions = {
     commit('setTodoItemsPagination');
   },
 
+  LOAD_TODO_ITEMS_PAGINATION({ commit }, { page }) {
+    commit('setTodoItemsPagination', page);
+  },
+
   async ADD_NEW_ITEM({ commit }, { todoItem }) {
     const response = await this.$axios.$post("/addTodo", todoItem);
     commit('setTodoItem', response.todoItem);
     commit('setTodoItemsPagination');
   },
 
-  LOAD_TODO_ITEMS_PAGINATION({ commit }, { page }) {
-    commit('setTodoItemsPagination', page);
-  },
-
   async UPDATE_ISDONE({ commit }, todoObj) {
     const response = await this.$axios.patch('/updateIsDone', todoObj);
-    commit('updateIsDone', response.data.result);
+    const response1 = await this.$axios.patch('/updatePoint', {
+        ...todoObj,
+        pointId: this.getters.getPoint._id
+    });
+    
+
+    commit('updateIsDone', response.data);
+    commit('deleteTodo',{_id: todoObj.todoId})
   },
 
   async DELETE_TODO({ commit }, { todo }) {

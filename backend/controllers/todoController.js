@@ -33,7 +33,6 @@ exports.getTodosByUserId = async (req, res, next) => {
     
     try {
         const todoList = await todoModel.find(targetField).sort({startAt: 1});
-        console.log(todoList);
         //     $and: [targetField],
         //     $or: [{ startAt: {$lt: compareDate}}, { startAt: {$gte: today}}],
         
@@ -54,15 +53,14 @@ exports.updateIsDone = async (req, res, next) => {
     let { todoId, isDone } = req.body;
     isDone = !isDone;
 
+    console.log("=====");
+    console.log(todoId);
+
     try {
         const todo = await todoModel.findByIdAndUpdate(todoId, { $set: { isDone } });
-
         res.status(200).json({
-            message: "success update todo isDone",
-            result: {
-                todoId,
-                isDone
-            }
+            todoId,
+            isDone
         });
     } catch (err) {
         if (!err.statusCode) {
