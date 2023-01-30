@@ -140,6 +140,7 @@ export const actions = {
 
     commit('updateIsDone', response.data);
     commit('deleteTodo',{_id: todoObj.todoId})
+    commit('setPoint', response1.data.point);
   },
 
   async DELETE_TODO({ commit }, { todo }) {
