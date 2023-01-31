@@ -15,7 +15,7 @@
                     ALL
                 </v-btn>
             </v-toolbar-title>
-            <v-btn v-if="getCountTodoItems > 0" class="btn-deleteAll mr-4" @click="deleteTodoAll" outlined absolute>
+            <v-btn  class="btn-deleteAll mr-4" @click="deleteTodoAll" outlined absolute>
                 DELETE ALL
             </v-btn>
 
@@ -52,7 +52,7 @@
             </v-list-item-group>
             <div class="text-center">
                 <client-only>
-                    <v-pagination v-model="page" :length="totalPages" @input="next"></v-pagination>
+                    <v-pagination v-model="page" :length="getTotalPage" @input="next"></v-pagination>
                 </client-only>
             </div>
         </v-list>
@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
     data() {
@@ -84,13 +84,14 @@ export default {
             this.$store.dispatch('UPDATE_ISDONE', todoObj)
         },
         deleteTodo(todo) {
-            // TODO: delete 하기 전에 currentDate - startAt dㅣ 66일 이상인지 체크 
             this.$store.dispatch('DELETE_TODO', { todo });
         },
         deleteTodoAll() {
             this.$store.dispatch('DELETE_TODO_ALL');
         },
         filterItems({ status }) {
+            this.page = 1;
+
             let currentFilter = {};
             this.todoBtnActive = false;
             this.doneBtnActive = false;
@@ -136,8 +137,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['getTodoItemsByPagination', 'getCountTodoItems']),
-        ...mapState(['totalPages']),
+        ...mapGetters(['getTodoItemsByPagination', 'getTotalPage']),
     }
 
 };

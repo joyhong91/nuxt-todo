@@ -29,16 +29,15 @@ exports.getTodosByUserId = async (req, res, next) => {
     const date = new Date();
     const dateToString = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
     const today = new Date(dateToString);
-    const targetField = isDone ? { userId, isDone, startAt: {$gte: today} } : { userId };
+    const targetField = isDone ? { userId, startAt: {$gte: today} } : { userId };
     
     try {
-        const todoItems = await todoModel.find(targetField).sort({startAt: 1});
-        //     $and: [targetField],
-        //     $or: [{ startAt: {$lt: compareDate}}, { startAt: {$gte: today}}],
-        
+        const todoItems = await todoModel.find(targetField).sort({createdAt: -1});
         res.status(200).json({
             message: "success load todo list",
-            todoItems
+            todoItems,
+            isDone,
+            todoLength: todoItems.length
         });
     } catch (err) {
         if (!err.statusCode) {

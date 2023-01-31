@@ -2,9 +2,9 @@
     
     <div class="count--wrap text-center">
         <p>습관이 몸에 베이기 까지 66일!</p>
-        <span>{{getCountDoneItems}} </span>
+        <span>{{getDoneCount}} </span>
         <span>/</span>
-        <span>{{ getCountTodoItems }}</span>
+        <span>{{ getTodoCount }}</span>
     </div>
 </template>
 
@@ -12,7 +12,7 @@
 import { mapGetters } from 'vuex';
 export default {
     computed: {
-        ...mapGetters(['getCountDoneItems', 'getCountTodoItems'])
+        ...mapGetters(['getTodoCount', 'getDoneCount'])
     }
 };
 </script>
