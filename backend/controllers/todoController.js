@@ -29,16 +29,15 @@ exports.getTodosByUserId = async (req, res, next) => {
     const date = new Date();
     const dateToString = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
     const today = new Date(dateToString);
-    const targetField = isDone ? { userId, isDone, startAt: {$gte: today} } : { userId };
+    const targetField = isDone ? { userId, startAt: {$gte: today} } : { userId };
     
     try {
-        const todoItems = await todoModel.find(targetField).sort({startAt: 1});
-        //     $and: [targetField],
-        //     $or: [{ startAt: {$lt: compareDate}}, { startAt: {$gte: today}}],
-        
+        const todoItems = await todoModel.find(targetField).sort({createdAt: -1});
         res.status(200).json({
             message: "success load todo list",
-            todoItems
+            todoItems,
+            isDone,
+            todoLength: todoItems.length
         });
     } catch (err) {
         if (!err.statusCode) {
@@ -48,6 +47,24 @@ exports.getTodosByUserId = async (req, res, next) => {
     }
 };
 
+exports.updateTodo = async (req, res, next) => {
+    let { todoId, title, startAt } = req.body;
+
+    try {
+        const todo = await todoModel.findByIdAndUpdate(todoId, { $set: { title, startAt } });
+        console.log("========");
+        console.log(todo);
+        res.status(200).json({
+            message: "success update todo ",
+            todo
+        });
+    } catch (err) {
+        if (!err.statusCode) {
+            err.statusCode = 500;
+        }
+        next(err);
+    }
+};
 
 exports.updateIsDone = async (req, res, next) => {
     let { todoId, isDone } = req.body;

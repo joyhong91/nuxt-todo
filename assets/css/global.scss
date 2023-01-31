@@ -110,7 +110,21 @@ footer {
     font-size: 3rem;
     font-family: "KOTRA_BOLD-Bold";
 
-    >p {
+    .row {
+        font-size: 1.2rem;
+        
+        &:last-child{
+            font-size: 1.8rem;
+        }
+
+        .col {
+            padding: 5px;
+            span.text--secondary {
+                font-size: 1.1rem;
+            }
+        }
+    }
+    > p {
         font-size: 0.9rem;
     }
 }
@@ -186,5 +200,12 @@ footer {
 
     .mx-icon-calendar {
         color: $white-color;
+    }
+}
+
+.v-list-item__icon {
+    .v-btn:not(.v-btn--round).v-size--default {
+        min-width: auto;
+        padding: 0 10px;
     }
 }

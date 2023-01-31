@@ -3,7 +3,7 @@
     <v-alert v-if="this.errorMsg != ''" dense outlined type="error">
       {{ this.errorMsg }}
     </v-alert>
-    <form @submit.prevent="addTodo" @keyup.enter="addTodo">
+    <form @submit.prevent="addTodo" @keypress.enter.prevent="addTodo">
       <v-row>
         <v-col cols="12" sm="8" md="8" class="pt-0 pb-0 mb-3">
           <v-text-field :label="this.$INPUT().TITLE_PLACEHOLDER" outlined v-model="todoTitle" hide-details="auto"
@@ -14,7 +14,7 @@
             <date-picker v-model="startAt" valueType="format" format="YYYY-MM-DD" input-class="datepicker text-center"
               :placeholder="this.$INPUT().DATE_PLACEHOLDER"></date-picker>
           </client-only>
-          <v-btn class="ml-2" @click="addTodo">
+          <v-btn class="ml-2" type="submit">
             ENTER
           </v-btn>
         </v-col>

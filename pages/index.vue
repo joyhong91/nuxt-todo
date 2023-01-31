@@ -3,6 +3,7 @@
     <todo-dashboard/>
     <todo-input />
     <todo-list />
+    <todo-list-dialog/>
   </div>
 </template>
 
