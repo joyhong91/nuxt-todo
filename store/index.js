@@ -70,8 +70,8 @@ export const mutations = {
     state.totalPages = Math.ceil(state.todoItems.length / state.itemsPerPage);
   },
   updateIsDone(state, todo) {
-    const todoItem = state.todoItems.find(item => item._id === todo.todoId);
-    todoItem.isDone = !todoItem.isDone;
+    const todoItem = state.todoItems.find(item => item._id === todo._id);
+    todoItem.isDone = todo.isDone;
   },
   deleteTodo(state, todo) {
     const todoItem = state.todoItems.find(item => item._id === todo._id);
@@ -138,8 +138,8 @@ export const actions = {
     });
     
 
-    commit('updateIsDone', response.data);
-    commit('deleteTodo',{_id: todoObj.todoId})
+    commit('updateIsDone', response.data.todo);
+    commit('deleteTodo',{_id: response.data.todo._id})
     commit('setPoint', response1.data.point);
   },
 

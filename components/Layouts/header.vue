@@ -30,10 +30,10 @@
                         {{ this.$store.state.currentUser.email }}
                     </v-list-item-title>
                     <v-list-item-title v-else>
-                        대기업 사장님
+                        Guest
                     </v-list-item-title>
                     <v-list-item-title class="text-right">
-                    [ {{this.$store.getters.getPoint.amount}}p ]
+                    [ {{this.$store.getters.getPoint?.amount}}p ]
                     </v-list-item-title>
                 </v-list-item-content>
                 
