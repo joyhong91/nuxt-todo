@@ -44,11 +44,13 @@ exports.updatePoint = async (req, res, next) => {
     try {
         let point;
         if(isDone) {
-            point = await pointModel.findByIdAndUpdate(pointId, {$addToSet: {todoIds: todoId}, $inc: {amount: 2}}, {upsert: true});
+            point = await pointModel.findByIdAndUpdate(pointId, {$addToSet: {todoIds: todoId}, $inc: {amount: 2}}, {upsert: true}).exec();
         } else {
-            point = await pointModel.findByIdAndUpdate(pointId, {$pull: {todoIds: todoId}, $inc: {amount: -2}}, {upsert: true});
+            point = await pointModel.findByIdAndUpdate(pointId, {$pull: {todoIds: todoId}, $inc: {amount: -2}}, {upsert: true}).exec();
         }
         
+        console.log("======");
+        console.log(point);
         res.status(200).json({
             message: 'success update point',
             point

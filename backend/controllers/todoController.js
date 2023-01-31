@@ -3,17 +3,17 @@ const todoModel = require("../models/todoModels");
 exports.addTodo = async (req, res, next) => {
     const { userId, title, startAt, isDone } = req.body;
     try {
-        const todoItem = new todoModel({
+        const newTodoModel = new todoModel({
             userId,
             title,
             isDone,
             startAt
         });
-        const result = await todoItem.save();
+        const todoItem = await newTodoModel.save();
 
         res.status(200).json({
             message: "success add todo",
-            todoItem: result
+            todoItem
         });
 
     } catch (err) {
@@ -32,13 +32,13 @@ exports.getTodosByUserId = async (req, res, next) => {
     const targetField = isDone ? { userId, isDone, startAt: {$gte: today} } : { userId };
     
     try {
-        const todoList = await todoModel.find(targetField).sort({startAt: 1});
+        const todoItems = await todoModel.find(targetField).sort({startAt: 1});
         //     $and: [targetField],
         //     $or: [{ startAt: {$lt: compareDate}}, { startAt: {$gte: today}}],
         
         res.status(200).json({
             message: "success load todo list",
-            todoItems: todoList
+            todoItems
         });
     } catch (err) {
         if (!err.statusCode) {
@@ -53,14 +53,11 @@ exports.updateIsDone = async (req, res, next) => {
     let { todoId, isDone } = req.body;
     isDone = !isDone;
 
-    console.log("=====");
-    console.log(todoId);
-
     try {
         const todo = await todoModel.findByIdAndUpdate(todoId, { $set: { isDone } });
         res.status(200).json({
-            todoId,
-            isDone
+            message: "success update todo done",
+            todo
         });
     } catch (err) {
         if (!err.statusCode) {
@@ -78,7 +75,7 @@ exports.deleteTodoById = async (req, res, next) => {
 
         res.status(200).json({
             message: "success delete todo",
-            deletedTodo: deletedTodo
+            deletedTodo
         });
 
     } catch (err) {
@@ -97,7 +94,7 @@ exports.deleteMany = async (req, res, next) => {
 
         res.status(200).json({
             message: "success delete many todo",
-            deletedTodo: deletedTodos
+            deletedTodos
         });
 
     } catch (err) {
