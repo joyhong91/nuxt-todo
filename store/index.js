@@ -5,7 +5,8 @@ export const state = () => ({
     todo: {
         items: [],
         todoCount: 0,
-        doneCount: 0
+        doneCount: 0,
+        total: 0,
     },
     page: {
         startOffset: 0,
@@ -29,7 +30,9 @@ export const getters = {
     getTodoItems(state) {
         return state.todo.items;
     },
-    
+    getTotalCount(state) {
+        return state.todo.total;
+    },
     getTodoCount(state) {
         return state.todo.todoCount;
     },
@@ -49,22 +52,27 @@ export const getters = {
 };
 
 export const mutations = {
-    setTodoItems(state, {todoItems, todoLength, isDone}) {
+    setTodoItems(state, { todoItems, todoLength, isDone }) {
         const todoObj = state.todo;
+        
         todoObj.items = todoItems;
-        todoObj.todoCount = todoLength;
-        todoObj.doneCount = todoObj.items.filter(item => item.isDone).length;
 
-        this.commit('setTodoItemsInTab', {todoItems, isDone});
+        if (isDone !== undefined) {
+            todoObj.total = todoLength;
+            todoObj.todoCount = todoObj.items.filter(item => !item.isDone).length;
+            todoObj.doneCount = todoObj.items.filter(item => item.isDone).length;
+        }
+
+        this.commit('setTodoItemsInTab', { todoItems, isDone });
     },
-    setTodoItemsInTab(state, {todoItems, isDone}) {
+    setTodoItemsInTab(state, { todoItems, isDone }) {
         if (isDone === undefined) {
             return false;
         }
 
         state.todo.items = todoItems.filter(item => item.isDone === (isDone === 'true'));
     },
-    
+
     setCurrentUser(state, user) {
         state.currentUser = user;
     },
@@ -82,31 +90,47 @@ export const mutations = {
     setTodoItemsPagination(state, page) {
         const currentPage = page ? page : 1;
         const pageObj = state.page;
-        
+
         pageObj.startOffset = (currentPage - 1) * pageObj.perPage;
         pageObj.endOffset = pageObj.startOffset + pageObj.perPage;
         pageObj.total = Math.ceil(state.todo.items.length / pageObj.perPage);
     },
     addTodoItem(state, todoItem) {
         const todoObj = state.todo;
-        
+
         todoObj.items.unshift(todoItem);
-        todoObj.todoCount = ++todoObj.todoCount;
+        todoObj.todoCount = todoObj.todoCount + 1;
+    },
+    updateTodo(state, todo) {
+        const todoObj = state.todo;
+        const todoItem = todoObj.items.find(item => item._id === todo.todoId);
+
+        todoItem.title = todo.title;
     },
     updateIsDone(state, todo) {
         const todoObj = state.todo;
         const todoItem = todoObj.items.find(item => item._id === todo._id);
+
         todoItem.isDone = !todoItem.isDone;
 
-        todoObj.doneCount = todoItem.isDone ? ++todoObj.doneCount : --todoObj.doneCount
+        if (todoItem.isDone) {
+            todoObj.todoCount = todoObj.todoCount - 1;
+            todoObj.doneCount = todoObj.doneCount + 1;
+        } else {
+            todoObj.todoCount = todoObj.todoCount + 1;
+            todoObj.doneCount = todoObj.doneCount - 1;
+        }
     },
-    deleteTodo(state, todo) {
+    deleteTodo(state, { todoId, isUpdateCount = true }) {
         const todoObj = state.todo;
-        const todoItem = todoObj.items.find(item => item._id === todo._id);
+        const todoItem = todoObj.items.find(item => item._id === todoId);
         const targetIndex = todoObj.items.indexOf(todoItem);
 
+        if (isUpdateCount) {
+            todoObj.todoCount = todoItem.isDone ? todoObj.doneCount - 1 : todoObj.todoCount - 1;
+        }
+
         todoObj.items.splice(targetIndex, 1);
-        todoObj.todoCount = --todoObj.todoCount;
     },
     deleteAll(state) {
         state.todo.items = [];
@@ -147,7 +171,7 @@ export const actions = {
 
     async ADD_NEW_ITEM({ commit }, { todoItem }) {
         const response = await this.$axios.$post("/addTodo", todoItem);
-        
+
         commit('addTodoItem', response.todoItem);
         commit('setTodoItemsPagination');
     },
@@ -160,10 +184,15 @@ export const actions = {
         });
 
         commit('updateIsDone', resTodo.data.todo);
-        commit('deleteTodo', { _id: resTodo.data.todo._id })
+        commit('deleteTodo', { todoId: resTodo.data.todo._id, isUpdateCount: false });
         commit('setPoint', resPoint.data.point);
+        commit('setTodoItemsPagination');
     },
-
+    async UPDATE_TODO({commit}, {todoItem}) {
+        await this.$axios.patch('/updateTodo', todoItem);
+        
+        commit('updateTodo', todoItem);
+    },
     async DELETE_TODO({ commit }, { todo }) {
         const diffDays = calDiffDays(todo.startAt);
         const alertDesc = confirmMessages(diffDays, this.$ALERT_MESSAGES());
@@ -175,7 +204,7 @@ export const actions = {
         const response = await this.$axios.$delete("/deleteTodoById", {
             params: { _id: todo._id }
         });
-        commit('deleteTodo', response.deletedTodo);
+        commit('deleteTodo', { todoId: response.deletedTodo._id });
     },
 
     DELETE_TODO_ALL({ commit }) {

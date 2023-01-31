@@ -47,6 +47,24 @@ exports.getTodosByUserId = async (req, res, next) => {
     }
 };
 
+exports.updateTodo = async (req, res, next) => {
+    let { todoId, title, startAt } = req.body;
+
+    try {
+        const todo = await todoModel.findByIdAndUpdate(todoId, { $set: { title, startAt } });
+        console.log("========");
+        console.log(todo);
+        res.status(200).json({
+            message: "success update todo ",
+            todo
+        });
+    } catch (err) {
+        if (!err.statusCode) {
+            err.statusCode = 500;
+        }
+        next(err);
+    }
+};
 
 exports.updateIsDone = async (req, res, next) => {
     let { todoId, isDone } = req.body;
