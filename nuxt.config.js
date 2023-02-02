@@ -76,7 +76,20 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-   
+    baseURL: '/',
+    proxy: true,
+    headers: { //optional
+      'Accept': 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    }
+  },
+  proxy:
+  {
+    '/api/': {
+      target: development ? 'http://localhost:3000':'http://joyhong9102.netlify.app',
+      pathRewrite: { '^/api/': '' },
+      changeOrigin: true
+    }
   },
   // privateRuntimeConfig: {
   //   axios: {
@@ -86,7 +99,7 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
   target: 'static', //for netlify 
-  extend (config, ctx) {
+  extend(config, ctx) {
     if (ctx.isServer) {
       config.externals = [
         nodeExternals({
