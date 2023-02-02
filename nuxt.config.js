@@ -1,4 +1,4 @@
-
+const development = process.env.NODE_ENV !== 'production';
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -82,7 +82,8 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL: "http://localhost:8080"
+    baseURL: development ? "http://localhost:8080" : "https://domain",
+    https: true
   },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
