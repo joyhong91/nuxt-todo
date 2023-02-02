@@ -82,7 +82,7 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL: development ? "http://localhost:8080" : "https://domain",
+    baseURL: development ? "http://localhost:8080" : "https://joyhong9102.netlify.app",
     https: true
   },
   // Build Configuration: https://go.nuxtjs.dev/config-build
