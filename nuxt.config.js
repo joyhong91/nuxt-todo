@@ -50,6 +50,7 @@ export default {
   auth: {
     strategies: {
       local: {
+//      scheme: "refresh",
         token: {
           property: "token",
           global: true,
@@ -60,8 +61,13 @@ export default {
           property: "user",
           autoFetch: true
         },
+//      refreshToken: {  // it sends request automatically when the access token expires, and its expire time has set on the Back-end and does not need to we set it here, because is useless
+//        property: "refresh_token",
+//        data: "refresh_token",
+//      },
         endpoints: {
           login: { url: "/api/auth/login", method: "post" },
+//        refresh: { url: "/api/auth/refresh-token", method: "post" },
           logout: false, //  we don't have an endpoint for our logout in our API and we just remove the token from localstorage
           user: { url: "/api/auth/user", method: "get" }
         }
@@ -76,30 +82,15 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL: '/',
-    proxy: true,
-    headers: { //optional
-      'Accept': 'application/json, text/plain, */*',
-      'Content-Type': 'application/json',
-    }
+    host: development ? 'http://localhost:3000' : "https://joyhong9102.netlify.app",
+    port: "8080",
+    prefix: '/'
+    // baseURL: "http://localhost:8080"
   },
-  proxy:
-  {
-    '/api/': {
-      target: development ? 'http://localhost:3000':'http://joyhong9102.netlify.app',
-      pathRewrite: { '^/api/': '' },
-      changeOrigin: true
-    }
-  },
-  // privateRuntimeConfig: {
-  //   axios: {
-  //     baseURL: process.env.BASE_URL
-  //   }
-  // },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
   target: 'static', //for netlify 
-  extend(config, ctx) {
+  extend (config, ctx) {
     if (ctx.isServer) {
       config.externals = [
         nodeExternals({
