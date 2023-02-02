@@ -78,11 +78,11 @@ export default {
   axios: {
    
   },
-  privateRuntimeConfig: {
-    axios: {
-      baseURL: process.env.BASE_URL
-    }
-  },
+  // privateRuntimeConfig: {
+  //   axios: {
+  //     baseURL: process.env.BASE_URL
+  //   }
+  // },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
   target: 'static', //for netlify 
