@@ -82,7 +82,7 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL: 'http://localhost:8080', // Used as fallback if no runtime config is provided
+    baseURL: development ? 'http://localhost:8080': 'https://joyhong9102.netlify.app', // Used as fallback if no runtime config is provided
   },
 
   publicRuntimeConfig: {
