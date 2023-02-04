@@ -52,7 +52,7 @@ export default {
   },
   devServerHandlers: [],
   axios: {
-    // baseURL: development? 'http://localhost:3000/api': 'https://joyhong9102.netlify.app',
+    baseURL: development? 'http://localhost:3000': 'https://joyhong9102.netlify.app',
   },
   auth: {
     strategies: {
