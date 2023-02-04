@@ -5,8 +5,8 @@ const jwt = require("jsonwebtoken");
 exports.postSignin = async (req, res, next) => {
   const { name, email, password } = req.body;
   try {
-    const exsitUser = await userModel.findOne({ email: email });
-    if (exsitUser) {
+    const existUser = await userModel.findOne({ email: email });
+    if (existUser) {
       const error = new Error(
         "Eamil already exist, please pick another email!"
       );
