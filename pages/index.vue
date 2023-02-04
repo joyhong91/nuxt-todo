@@ -1,14 +1,14 @@
 <template>
   <div>
-    <todo-dashboard/>
+    <todo-dashboard />
     <todo-input />
     <todo-list />
-    <todo-list-dialog/>
+    <todo-list-dialog />
   </div>
 </template>
-
 <script>
-  export default {
-    middleware: "isAuthenticated"
-  };
-  </script>
+export default {
+  middleware: ['auth']
+}
+</script>
+

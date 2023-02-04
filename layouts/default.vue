@@ -13,15 +13,6 @@
 </template>
 
 <script>
-export default {
-  created() {
-    if(this.$auth.user) {
-      this.$store.commit('setCurrentUser', this.$auth.user);
-    }else { 
-      this.$store.commit('setGuest');
-    }
-  }
-}
 </script>
 
 

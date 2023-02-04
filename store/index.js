@@ -1,7 +1,8 @@
 
 export const state = () => ({
     isGuest: false,
-    currentUser: {},
+    currentUser: null,
+    authUser: null,
     todo: {
         items: [],
         todoCount: 0,
@@ -18,8 +19,8 @@ export const state = () => ({
 })
 
 export const getters = {
-    isAuthenticated(state) {
-        return state.auth.loggedIn; // auth object as default will be added in vuex state, when you initialize nuxt auth
+    isLoggined(state) {
+        return state.currentUser; // auth object as default will be added in vuex state, when you initialize nuxt auth
     },
     getUserInfo(state) {
         return state.auth.user;
@@ -72,7 +73,9 @@ export const mutations = {
 
         state.todo.items = todoItems.filter(item => item.isDone === (isDone === 'true'));
     },
-
+    setUser(state, user) {
+        state.authUser = user;
+    },
     setCurrentUser(state, user) {
         state.currentUser = user;
     },
@@ -143,6 +146,13 @@ export const mutations = {
 
 //actions 비동기 로직 
 export const actions = {
+    nuxtServerInit({ commit }, { req }) {
+        if(req.session.currentUser) {
+            commit('setCurrentUser', req.session.currentUser);
+        }
+
+        console.log(req.session.currentUser);
+    },
     async CREATE_POINT({ commit }, user) {
         const response = await this.$axios.$post("/createPoint", { userId: user.id });
 

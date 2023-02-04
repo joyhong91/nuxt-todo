@@ -1,7 +1,0 @@
-{
-  "env": {
-    "MONGO_USER": "joyhong",
-    "MONGO_PASS": "330300",
-    "MONGO_DB": "nuxtProject"
-  }
-}

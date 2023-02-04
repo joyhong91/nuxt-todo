@@ -52,8 +52,6 @@ exports.updateTodo = async (req, res, next) => {
 
     try {
         const todo = await todoModel.findByIdAndUpdate(todoId, { $set: { title, startAt } });
-        console.log("========");
-        console.log(todo);
         res.status(200).json({
             message: "success update todo ",
             todo
