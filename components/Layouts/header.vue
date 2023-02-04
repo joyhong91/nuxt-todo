@@ -26,7 +26,7 @@
                 </v-list-item-icon>
 
                 <v-list-item-content>
-                    <v-list-item-title v-if="isAuthenticated">
+                    <v-list-item-title v-if="isLoggined">
                         {{ this.$store.state.currentUser.email }}
                     </v-list-item-title>
                     <v-list-item-title v-else>
@@ -40,7 +40,7 @@
             </v-list-item>
             <v-divider></v-divider>
 
-            <v-list flat v-if="isAuthenticated">
+            <v-list flat v-if="isLoggined">
                 <v-list-item link>
                     <v-list-item-icon>
                         <v-icon aria-hidden="false">mdi-heart</v-icon>
@@ -111,7 +111,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['isAuthenticated', 'getPoint'])
+        ...mapGetters(['isLoggined', 'getPoint'])
     }
 };
 </script>

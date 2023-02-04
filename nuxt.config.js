@@ -1,3 +1,6 @@
+const development = process.env.NODE_ENV !== 'production';
+import bodyParser from 'body-parser'
+import session from 'express-session'
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -47,43 +50,47 @@ export default {
       }
     }
   },
+  axios: {
+    // baseURL: development? 'http://localhost:3000/api': 'https://joyhong9102.netlify.app',
+  },
   auth: {
     strategies: {
       local: {
-//      scheme: "refresh",
         token: {
-          property: "token",
+          property: 'token',
           global: true,
-          required: true,
-          type: "Bearer"
+          // required: true,
+          // type: 'Bearer'
         },
         user: {
-          property: "user",
-          autoFetch: true
+          property: 'user',
+          // autoFetch: true
         },
-//      refreshToken: {  // it sends request automatically when the access token expires, and its expire time has set on the Back-end and does not need to we set it here, because is useless
-//        property: "refresh_token",
-//        data: "refresh_token",
-//      },
         endpoints: {
-          login: { url: "/api/auth/login", method: "post" },
-//        refresh: { url: "/api/auth/refresh-token", method: "post" },
-          logout: false, //  we don't have an endpoint for our logout in our API and we just remove the token from localstorage
-          user: { url: "/api/auth/user", method: "get" }
+          login: { url: '/api/auth/login', method: 'post' },
+          logout: false,
+          user: false
         }
       }
-    },
-    redirect: {
-      home: false,
-      login: '/login',
-      logout: '/'
     }
   },
-
-  // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {
-    baseURL: "http://localhost:8080"
+  server: {
+    port: '3000'
   },
+  serverMiddleware:[
+    // body-parser middleware
+    bodyParser.json(),
+    // // session middleware
+    session({
+      secret: 'super-secret-key',
+      resave: false,
+      saveUninitialized: false,
+      cookie: { maxAge: 60000 }
+    }),
+    // Api middleware
+    // We add /api/login & /api/logout routes
+    '~/api'
+  ],
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
   target: 'static', //for netlify 

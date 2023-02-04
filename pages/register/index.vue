@@ -1,6 +1,6 @@
 <template>
   <div>
-    <auth-register />
+    <register />
   </div>
 </template>
 

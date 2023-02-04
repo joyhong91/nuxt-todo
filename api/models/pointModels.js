@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const { integer } = require("vuelidate/lib/validators");
 const Schema = mongoose.Schema;
 
 const PointSchema = new Schema(

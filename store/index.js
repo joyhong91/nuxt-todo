@@ -2,6 +2,7 @@
 export const state = () => ({
     isGuest: false,
     currentUser: {},
+    authUser: null,
     todo: {
         items: [],
         todoCount: 0,
@@ -18,8 +19,8 @@ export const state = () => ({
 })
 
 export const getters = {
-    isAuthenticated(state) {
-        return state.auth.loggedIn; // auth object as default will be added in vuex state, when you initialize nuxt auth
+    isLoggined(state) {
+        return state.currentUser; // auth object as default will be added in vuex state, when you initialize nuxt auth
     },
     getUserInfo(state) {
         return state.auth.user;
@@ -72,7 +73,9 @@ export const mutations = {
 
         state.todo.items = todoItems.filter(item => item.isDone === (isDone === 'true'));
     },
-
+    setUser(state, user) {
+        state.authUser = user;
+    },
     setCurrentUser(state, user) {
         state.currentUser = user;
     },
