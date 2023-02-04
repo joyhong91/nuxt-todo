@@ -19,7 +19,7 @@
             모두지우기
           </v-btn>
           <v-btn>
-            <nuxt-link to="/register">회원가입</nuxt-link>
+            <nuxt-link to="/auth/register">회원가입</nuxt-link>
           </v-btn>
           <v-btn @click="setGuest()">
             비회원모드

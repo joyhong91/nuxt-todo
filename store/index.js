@@ -146,12 +146,10 @@ export const mutations = {
 
 //actions 비동기 로직 
 export const actions = {
-    nuxtServerInit({ commit }, { req }) {
-        if(req.session.currentUser) {
-            commit('setCurrentUser', req.session.currentUser);
+    async nuxtServerInit({ commit }, { req }) {
+        if(req.session?.currentUser) {
+            await commit('setCurrentUser', req.session.currentUser);
         }
-
-        console.log(req.session.currentUser);
     },
     async CREATE_POINT({ commit }, user) {
         const response = await this.$axios.$post("/createPoint", { userId: user.id });

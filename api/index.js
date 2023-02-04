@@ -18,12 +18,16 @@ app.use('/', todoRouter);
 app.use('/', pointRouter);
 
 
-
 app.use((error, req, res, next) => {
   const status = error.statusCode || 500;
   const message = error.message;
   const data = error.data;
-  res.status(status).json({ message: message, data: data });
+
+  if(!req.session) {
+    return next(new Error('session not exist!!!'));
+  }else {
+    res.status(status).json({ message: message, data: data });
+  }
 });
 
 export default {

@@ -50,6 +50,7 @@ export default {
       }
     }
   },
+  devServerHandlers: [],
   axios: {
     // baseURL: development? 'http://localhost:3000/api': 'https://joyhong9102.netlify.app',
   },
@@ -85,9 +86,9 @@ export default {
     bodyParser.json(),
     // // session middleware
     session({
-      secret: 'super-secret-key',
+      secret: 'secret',
       resave: false,
-      saveUninitialized: false,
+      saveUninitialized: true,
       cookie: { maxAge: 60000 }
     }),
     // Api middleware
