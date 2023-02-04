@@ -76,7 +76,7 @@
           const data = { email: this.email, password: this.password };
           const response = await this.$auth.loginWith("local", {data});
 
-          this.$store.commit('setCurrentUser', response.user);
+          this.$store.commit('setCurrentUser', response.data.user);
           this.$store.dispatch('LOAD_POINT');
           await this.$router.push('/');
   

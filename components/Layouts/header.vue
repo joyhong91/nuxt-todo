@@ -106,7 +106,7 @@ export default {
         async logout() {
             await this.$auth.logout();
             this.$store.commit('setEmptyCurrentUser');
-            this.$router.push("/");
+            this.$router.push("/auth/login");
 
         }
     },

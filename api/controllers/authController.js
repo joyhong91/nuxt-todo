@@ -44,7 +44,8 @@ exports.postLogin = async (req, res, next) => {
     const user = await userModel.findOne({ email: email });
     console.log("=======");
     console.log(user);
-    req.session.authUser = user;
+    req.session.currentUser = user;
+    console.log(req.session.currentUser);
     if (!user) {
       const error = new Error("user with this email not found!");
       error.statusCode = 401;

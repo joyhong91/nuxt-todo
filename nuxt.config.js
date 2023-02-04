@@ -72,6 +72,12 @@ export default {
           user: false
         }
       }
+    },
+    redirect: {
+      login: '/auth/login',
+      logout: '/',
+      callback: '/auth/login',
+      home: '/'
     }
   },
   server: {

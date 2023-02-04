@@ -1,7 +1,7 @@
 
 export const state = () => ({
     isGuest: false,
-    currentUser: {},
+    currentUser: null,
     authUser: null,
     todo: {
         items: [],
@@ -146,6 +146,13 @@ export const mutations = {
 
 //actions 비동기 로직 
 export const actions = {
+    nuxtServerInit({ commit }, { req }) {
+        if(req.session.currentUser) {
+            commit('setCurrentUser', req.session.currentUser);
+        }
+
+        console.log(req.session.currentUser);
+    },
     async CREATE_POINT({ commit }, user) {
         const response = await this.$axios.$post("/createPoint", { userId: user.id });
 
