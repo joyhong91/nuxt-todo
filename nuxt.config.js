@@ -80,10 +80,6 @@ export default {
       home: '/'
     }
   },
-
-  server: {
-    port: '3000'
-  },
   serverMiddleware:[
     // body-parser middleware
     bodyParser.json(),
