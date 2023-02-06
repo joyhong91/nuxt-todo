@@ -9,6 +9,7 @@ exports.addTodo = async (req, res, next) => {
             isDone,
             startAt
         });
+
         const todoItem = await newTodoModel.save();
 
         res.status(200).json({
@@ -25,19 +26,15 @@ exports.addTodo = async (req, res, next) => {
 };
 
 exports.getTodosByUserId = async (req, res, next) => {
-    const { userId, isDone} = req.query;
-    const date = new Date();
-    const dateToString = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
-    const today = new Date(dateToString);
+    const { userId, isDone, today} = req.query;
     const targetField = isDone ? { userId, startAt: {$gte: today} } : { userId };
     
     try {
         const todoItems = await todoModel.find(targetField).sort({createdAt: -1});
+
         res.status(200).json({
-            message: "success load todo list",
             todoItems,
             isDone,
-            todoLength: todoItems.length
         });
     } catch (err) {
         if (!err.statusCode) {
@@ -48,13 +45,11 @@ exports.getTodosByUserId = async (req, res, next) => {
 };
 
 exports.updateTodo = async (req, res, next) => {
-    let { todoId, title, startAt } = req.body;
-
+    let { _id, title, startAt } = req.body;
     try {
-        const todo = await todoModel.findByIdAndUpdate(todoId, { $set: { title, startAt } });
+        const todoItem = await todoModel.findByIdAndUpdate(_id, { $set: { title, startAt } });
         res.status(200).json({
-            message: "success update todo ",
-            todo
+            todoItem
         });
     } catch (err) {
         if (!err.statusCode) {
@@ -65,14 +60,13 @@ exports.updateTodo = async (req, res, next) => {
 };
 
 exports.updateIsDone = async (req, res, next) => {
-    let { todoId, isDone } = req.body;
+    let { _id, isDone } = req.body;
     isDone = !isDone;
 
     try {
-        const todo = await todoModel.findByIdAndUpdate(todoId, { $set: { isDone } });
+        const todoItem = await todoModel.findByIdAndUpdate(_id, { $set: { isDone } });
         res.status(200).json({
-            message: "success update todo done",
-            todo
+            todoItem
         });
     } catch (err) {
         if (!err.statusCode) {
@@ -83,14 +77,13 @@ exports.updateIsDone = async (req, res, next) => {
 };
 
 exports.deleteTodoById = async (req, res, next) => {
-    const todoId = req.query._id;
+    const todoId = req.query.todoId;
 
     try {
-        const deletedTodo = await todoModel.findByIdAndDelete(todoId);
+        const todoItem = await todoModel.findByIdAndDelete(todoId);
 
         res.status(200).json({
-            message: "success delete todo",
-            deletedTodo
+            todoItem
         });
 
     } catch (err) {
@@ -105,11 +98,10 @@ exports.deleteMany = async (req, res, next) => {
     const todoIds = req.query.ids;
 
     try {
-        const deletedTodos = await todoModel.deleteMany({ _id: todoIds });
+        const todoItems = await todoModel.deleteMany({ _id: todoIds });
 
         res.status(200).json({
-            message: "success delete many todo",
-            deletedTodos
+            todoItems
         });
 
     } catch (err) {

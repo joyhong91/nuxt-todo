@@ -19,11 +19,9 @@
             모두지우기
           </v-btn>
           <v-btn>
-            <nuxt-link to="/register">회원가입</nuxt-link>
+            <nuxt-link to="/auth/register">회원가입</nuxt-link>
           </v-btn>
-          <v-btn @click="setGuest()">
-            비회원모드
-          </v-btn>
+          
         </div>
       </form>
     </div>
@@ -77,7 +75,6 @@
           const response = await this.$auth.loginWith("local", {data});
 
           this.$store.commit('setCurrentUser', response.data.user);
-          this.$store.dispatch('LOAD_POINT');
           await this.$router.push('/');
   
         } catch (err) {
@@ -94,10 +91,6 @@
         this.email = '';
         this.password = '';
         this.errorMsg = '';
-      },
-      setGuest() {
-        this.$store.commit('setGuest');
-        this.$router.push('/');
       }
     },
   

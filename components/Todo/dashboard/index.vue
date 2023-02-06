@@ -23,7 +23,8 @@ export default {
     computed: {
         ...mapGetters(['getTodoCount', 'getDoneCount', 'getTotalCount']),
         getPercent() {
-            return Math.floor(this.getDoneCount / this.getTotalCount * 100);
+            const percent = Math.floor(this.getDoneCount / this.getTotalCount * 100);
+            return isNaN(percent) ? 0 : percent;
         },
     }
 };

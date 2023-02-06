@@ -50,8 +50,11 @@ export default {
       }
     }
   },
+  router: {
+    middleware: 'auth'
+  },
   axios: {
-    // baseURL: development? 'http://localhost:3000/api': 'https://joyhong9102.netlify.app',
+    baseURL: development? 'http://localhost:3000': 'https://joyhong9102.netlify.app',
   },
   auth: {
     strategies: {
@@ -59,8 +62,8 @@ export default {
         token: {
           property: 'token',
           global: true,
-          // required: true,
-          // type: 'Bearer'
+          required: true,
+          type: 'Bearer'
         },
         user: {
           property: 'user',
@@ -76,22 +79,18 @@ export default {
     redirect: {
       login: '/auth/login',
       logout: '/',
-      callback: '/auth/login',
-      home: '/'
+      home: false
     }
-  },
-  server: {
-    port: '3000'
   },
   serverMiddleware:[
     // body-parser middleware
     bodyParser.json(),
     // // session middleware
     session({
-      secret: 'super-secret-key',
+      secret: 'secret',
       resave: false,
-      saveUninitialized: false,
-      cookie: { maxAge: 60000 }
+      saveUninitialized: true,
+      cookie: { maxAge: 600000 }
     }),
     // Api middleware
     // We add /api/login & /api/logout routes
@@ -99,7 +98,6 @@ export default {
   ],
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
-  target: 'static', //for netlify 
   extend (config, ctx) {
     if (ctx.isServer) {
       config.externals = [

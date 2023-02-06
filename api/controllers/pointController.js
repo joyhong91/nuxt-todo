@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const pointModel = require("../models/pointModels");
 
 exports.createPoint = async (req, res, next) => {
@@ -22,10 +23,9 @@ exports.createPoint = async (req, res, next) => {
 
 exports.getPointByUserId = async (req, res, next) => {
     const { userId } = req.query;
-
     try {
-        const point = await pointModel.find({userId});
-        
+        const point = await pointModel.findOne({ userId });
+
         res.status(200).json({
             point
         });
@@ -41,6 +41,7 @@ exports.getPointByUserId = async (req, res, next) => {
 exports.updatePoint = async (req, res, next) => {
     let { todoId, isDone, pointId } = req.body;
     isDone = !isDone;
+    
     try {
         let point;
         if(isDone) {
@@ -50,7 +51,6 @@ exports.updatePoint = async (req, res, next) => {
         }
         
         res.status(200).json({
-            message: 'success update point',
             point
         });
     } catch (err) {

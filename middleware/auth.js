@@ -1,6 +1,6 @@
 export default function ({ store, redirect, error }) {
     // auth 확인
-    if (!store.getters.getCurrentUser) {
+    if (store.state.currentUser === null) {
       return redirect('/auth/login');
     }
   }

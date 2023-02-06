@@ -43,13 +43,13 @@ export default {
       try {
         if (this.todoTitle !== '' && this.todoTitle.trim().length > 0) {
           const newTodoItem = {
-            userId: this.$store.getters.getCurrentUser.id,
+            userId: this.$store.getters.getCurrentUser._id,
             isDone: false,
             title: this.todoTitle.trim(),
             startAt: this.startAt
           }
 
-          await this.$store.dispatch('ADD_NEW_ITEM', { todoItem: newTodoItem });
+          await this.$store.dispatch('ADD_NEW_ITEM', newTodoItem);
           this.clearInputBox();
         } else {
           this.errorMsg = this.$ERROR().EMPTY;

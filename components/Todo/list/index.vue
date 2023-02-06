@@ -2,22 +2,20 @@
     <v-card class="mx-auto">
         <v-toolbar color="teal">
             <v-toolbar-title>
-                <v-btn  color="white" plain @click="filterItems({ status: 'todo' })"
-                    :class="{active: todoBtnActive}">
+                <v-btn color="white" plain @click="filterItems({ status: 'todo' })" :class="{active: todoBtnActive}">
                     TODO
                 </v-btn>
-                <v-btn  color="darkgrey" plain @click="filterItems({ status: 'done' })"
+                <v-btn color="darkgrey" plain @click="filterItems({ status: 'done' })"
                     :class="{ active: doneBtnActive }">
                     DONE
                 </v-btn>
-                <v-btn  color="white" plain @click="filterItems({ status: 'all' })"
-                    :class="{ active: allBtnActive }">
+                <v-btn color="white" plain @click="filterItems({ status: 'all' })" :class="{ active: allBtnActive }">
                     ALL
                 </v-btn>
             </v-toolbar-title>
             <v-btn class="btn-deleteAll mr-4" @click="deleteTodoAll" outlined absolute>
                 <v-icon left>
-                   mdi-delete
+                    mdi-delete
                 </v-icon>
                 ALL
             </v-btn>
@@ -27,8 +25,7 @@
         <v-list>
             <v-list-item-group>
                 <v-list-item v-for="todoItem in getTodoItemsByPagination" v-bind:key="todoItem.id"
-                    v-bind:class="{ isDone: todoItem.isDone }"
-                    @click="toggleItem({ isDone: todoItem.isDone, todoId: todoItem._id })"
+                    v-bind:class="{ isDone: todoItem.isDone }" @click="toggleItem(todoItem)"
                     :disabled="checkedDisabled(todoItem.startAt, todoItem.isDone)">
                     <template>
                         <v-list-item-action class="mr-2">
@@ -39,20 +36,18 @@
                         </v-list-item-action>
 
                         <v-list-item-content>
-                            <v-list-item-title>{{ todoItem.title }} || {{ todoItem.isDone }} || {{
-                                getDateFormat(todoItem.startAt)
-                            }}</v-list-item-title>
+                            <v-list-item-title>{{ todoItem.title }} <span>| {{getDateFormat(todoItem.startAt)}}</span></v-list-item-title>
                         </v-list-item-content>
 
-                        <v-list-item-icon >
-                            <v-btn class="ma-2" dark @click.stop="deleteTodo(todoItem)">
-                                <v-icon dark>
-                                    mdi-delete
-                                </v-icon>
-                            </v-btn>
+                        <v-list-item-icon>
                             <v-btn class="ma-2" dark @click.stop="updateTodo(todoItem)">
                                 <v-icon dark>
                                     mdi-pencil
+                                </v-icon>
+                            </v-btn>
+                            <v-btn class="ma-2" dark @click.stop="deleteTodo(todoItem)">
+                                <v-icon dark>
+                                    mdi-delete
                                 </v-icon>
                             </v-btn>
                         </v-list-item-icon>
@@ -87,14 +82,14 @@ export default {
         next(page) {
             this.$store.dispatch('LOAD_TODO_ITEMS_PAGINATION', { page });
         },
-        toggleItem(todoObj) {
-            this.$store.dispatch('UPDATE_ISDONE', todoObj)
+        toggleItem(todoItem) {
+            this.$store.dispatch('UPDATE_ISDONE', todoItem);
         },
-        updateTodo(todo) {
-            this.$root.$refs.dialog.updateForm(todo);
+        updateTodo(todoItem) {
+            this.$root.$refs.dialog.updateForm(todoItem);
         },
-        deleteTodo(todo) {
-            this.$store.dispatch('DELETE_TODO', { todo });
+        deleteTodo(todoItem) {
+            this.$store.dispatch('DELETE_TODO', todoItem);
         },
         deleteTodoAll() {
             this.$store.dispatch('DELETE_TODO_ALL');
@@ -139,6 +134,11 @@ export default {
         },
     },
     async fetch() {
+        if (this.$store.state.currentUser === null) {
+            this.$router.push('/auth/login');
+            return false;
+        }
+
         try {
             await this.$store.dispatch('LOAD_TODO_ITEMS', { isDone: false });
             await this.$store.dispatch('LOAD_POINT');
