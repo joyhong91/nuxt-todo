@@ -1,8 +1,6 @@
 
 export const state = () => ({
-    isGuest: false,
     currentUser: null,
-    authUser: null,
     todo: {
         items: [],
         todoCount: 0,
@@ -21,9 +19,6 @@ export const state = () => ({
 export const getters = {
     isLoggined(state) {
         return state.currentUser; // auth object as default will be added in vuex state, when you initialize nuxt auth
-    },
-    getUserInfo(state) {
-        return state.auth.user;
     },
     getCurrentUser(state) {
         return state.currentUser;
@@ -53,13 +48,13 @@ export const getters = {
 };
 
 export const mutations = {
-    setTodoItems(state, { todoItems, todoLength, isDone }) {
+    setTodoItems(state, { todoItems, isDone }) {
         const todoObj = state.todo;
-        
+
         todoObj.items = todoItems;
 
         if (isDone !== undefined) {
-            todoObj.total = todoLength;
+            todoObj.total = todoItems.length;
             todoObj.todoCount = todoObj.items.filter(item => !item.isDone).length;
             todoObj.doneCount = todoObj.items.filter(item => item.isDone).length;
         }
@@ -73,22 +68,11 @@ export const mutations = {
 
         state.todo.items = todoItems.filter(item => item.isDone === (isDone === 'true'));
     },
-    setUser(state, user) {
-        state.authUser = user;
-    },
     setCurrentUser(state, user) {
         state.currentUser = user;
     },
-    setGuest(state) {
-        state.currentUser = {
-            email: 'guest@guest.com',
-            password: 'password',
-            id: 'guestguest12'
-        }
-        state.isGuest = true;
-    },
     setEmptyCurrentUser(state) {
-        state.currentUser = {};
+        state.currentUser = null;
     },
     setTodoItemsPagination(state, page) {
         const currentPage = page ? page : 1;
@@ -98,21 +82,22 @@ export const mutations = {
         pageObj.endOffset = pageObj.startOffset + pageObj.perPage;
         pageObj.total = Math.ceil(state.todo.items.length / pageObj.perPage);
     },
-    addTodoItem(state, todoItem) {
+    addTodoItem(state, todoData) {
         const todoObj = state.todo;
 
-        todoObj.items.unshift(todoItem);
+        todoObj.items.unshift(todoData);
         todoObj.todoCount = todoObj.todoCount + 1;
+        todoObj.total = todoObj.total + 1;
     },
-    updateTodo(state, todo) {
+    updateTodo(state, todoData) {
         const todoObj = state.todo;
-        const todoItem = todoObj.items.find(item => item._id === todo.todoId);
+        const todoItem = todoObj.items.find(item => item._id === todoData.todoId);
 
-        todoItem.title = todo.title;
+        todoItem.title = todoData.title;
     },
-    updateIsDone(state, todo) {
+    updateIsDone(state, todoData) {
         const todoObj = state.todo;
-        const todoItem = todoObj.items.find(item => item._id === todo._id);
+        const todoItem = todoObj.items.find(item => item._id === todoData._id);
 
         todoItem.isDone = !todoItem.isDone;
 
@@ -124,19 +109,22 @@ export const mutations = {
             todoObj.doneCount = todoObj.doneCount - 1;
         }
     },
-    deleteTodo(state, { todoId, isUpdateCount = true }) {
+    deleteTodo(state, todoData) {
         const todoObj = state.todo;
-        const todoItem = todoObj.items.find(item => item._id === todoId);
+        const todoItem = todoObj.items.find(item => item._id === todoData._id);
         const targetIndex = todoObj.items.indexOf(todoItem);
 
-        if (isUpdateCount) {
-            todoObj.todoCount = todoItem.isDone ? todoObj.doneCount - 1 : todoObj.todoCount - 1;
+        if(todoItem.isDone) {
+            todoObj.doneCount = todoObj.doneCount - 1;
+        } else {
+            todoObj.todoCount = todoObj.todoCount - 1;
         }
-
+        
         todoObj.items.splice(targetIndex, 1);
+        todoObj.total = todoObj.total - 1;
     },
     deleteAll(state) {
-        state.todo.items = [];
+        state.todo = {items: [], todoCount: 0, doneCount: 0, total: 0};
     },
     setPoint(state, point) {
         state.point = point;
@@ -147,26 +135,26 @@ export const mutations = {
 //actions 비동기 로직 
 export const actions = {
     nuxtServerInit({ commit }, { req }) {
-        if(req?.session?.currentUser) {
+        if (req?.session?.currentUser) {
             commit('setCurrentUser', req?.session?.currentUser);
         }
     },
-    async CREATE_POINT({ commit }, user) {
-        const response = await this.$axios.$post("/createPoint", { userId: user.id });
+    async LOAD_POINT({ commit }) {
+        const user = this.getters.getCurrentUser;
+        let response = await this.$axios.$get('/getPointByUserId', {
+            params: { userId: user._id }
+        })
+
+        if (!response.point) {
+            response = await this.$axios.$post('/createPoint', { userId: user._id })
+        }
 
         commit('setPoint', response.point);
     },
-    async LOAD_POINT({ commit }) {
-        const user = this.getters.getCurrentUser;
-        const response = await this.$axios.$get('/getPointByUserId', {
-            params: { userId: user.id }
-        })
-
-        commit('setPoint', response.point[0]);
-    },
     async LOAD_TODO_ITEMS({ commit }, { isDone }) {
+        const today = new Date(getDateFormat());
         const response = await this.$axios.$get("/getTodosByUserId", {
-            params: { userId: this.getters.getCurrentUser.id, isDone }
+            params: { userId: this.getters.getCurrentUser._id, isDone, today }
         });
 
         commit('setTodoItems', response);
@@ -177,42 +165,50 @@ export const actions = {
         commit('setTodoItemsPagination', page);
     },
 
-    async ADD_NEW_ITEM({ commit }, { todoItem }) {
+    async ADD_NEW_ITEM({ commit }, todoItem) {
         const response = await this.$axios.$post("/addTodo", todoItem);
 
         commit('addTodoItem', response.todoItem);
         commit('setTodoItemsPagination');
     },
 
-    async UPDATE_ISDONE({ commit }, todoObj) {
-        const resTodo = await this.$axios.patch('/updateIsDone', todoObj);
+    async UPDATE_ISDONE({ commit }, todoItem) {
+        const resTodo = await this.$axios.patch('/updateIsDone', todoItem);
         const resPoint = await this.$axios.patch('/updatePoint', {
-            ...todoObj,
+            ...todoItem,
             pointId: this.getters.getPoint._id
         });
 
-        commit('updateIsDone', resTodo.data.todo);
-        commit('deleteTodo', { todoId: resTodo.data.todo._id, isUpdateCount: false });
+        commit('updateIsDone', resTodo.data.todoItem);
         commit('setPoint', resPoint.data.point);
         commit('setTodoItemsPagination');
     },
-    async UPDATE_TODO({commit}, {todoItem}) {
+    async UPDATE_TODO({ commit }, todoItem) {
         await this.$axios.patch('/updateTodo', todoItem);
-        
+
         commit('updateTodo', todoItem);
     },
-    async DELETE_TODO({ commit }, { todo }) {
-        const diffDays = calDiffDays(todo.startAt);
+    async DELETE_TODO({ commit }, todoItem) {
+        const diffDays = calDiffDays(todoItem.startAt);
         const alertDesc = confirmMessages(diffDays, this.$ALERT_MESSAGES());
-
         if (!confirm(alertDesc)) {
             return false;
         }
-
-        const response = await this.$axios.$delete("/deleteTodoById", {
-            params: { _id: todo._id }
+        const resTodo = await this.$axios.$delete("/deleteTodoById", {
+            params: { todoId: todoItem._id }
         });
-        commit('deleteTodo', { todoId: response.deletedTodo._id });
+
+        if (todoItem.isDone) {
+            const resPoint = await this.$axios.patch('/updatePoint', {
+                ...todoItem,
+                pointId: this.getters.getPoint._id
+            });
+
+            commit('setPoint', resPoint.data.point);
+        }
+
+        commit('deleteTodo', resTodo.todoItem);
+        
     },
 
     DELETE_TODO_ALL({ commit }) {
@@ -220,13 +216,13 @@ export const actions = {
             return false;
         }
 
-        const todoArr = [];
+        const ids = [];
         this.getters.getTodoItems.map(item => {
-            todoArr.push(item._id);
+            ids.push(item._id);
         })
 
         this.$axios.$delete("/deleteMany", {
-            params: { ids: todoArr }
+            params: { ids }
         });
 
         commit('deleteAll');
@@ -237,6 +233,10 @@ export const actions = {
 }
 
 //store.js 내부 함수
+const getDateFormat = (date) => {
+    const todoDate = date ? new Date(date) : new Date();
+    return `${todoDate.getFullYear()}-${todoDate.getMonth() + 1}-${todoDate.getDate()}`;
+}
 
 const calDiffDays = (startAt) => {
     const currentDate = new Date();

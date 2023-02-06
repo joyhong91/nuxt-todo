@@ -45,7 +45,7 @@ export default {
             dialog: false,
             todoTitle: '',
             startAt: '',
-            todoId: '',
+            _id: '',
         }
     },
     created() {
@@ -56,7 +56,7 @@ export default {
             this.dialog = true;
             this.todoTitle = todo.title;
             this.startAt = todo.startAt;
-            this.todoId = todo._id;
+            this._id = todo._id;
         },
         async updateTodo() {
             this.dialog = false;
@@ -65,10 +65,10 @@ export default {
                     const updateItem = {
                         title: this.todoTitle.trim(),
                         startAt: this.startAt,
-                        todoId: this.todoId
+                        _id: this._id
                     }
 
-                    await this.$store.dispatch('UPDATE_TODO', { todoItem: updateItem });
+                    await this.$store.dispatch('UPDATE_TODO', updateItem);
                 } else {
                     this.errorMsg = this.$ERROR().EMPTY;
                 }

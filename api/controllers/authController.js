@@ -36,22 +36,17 @@ exports.postSignin = async (req, res, next) => {
   }
 };
 
-let loadedUser;
 exports.postLogin = async (req, res, next) => {
   const { email, password } = req.body;
 
   try {
     const user = await userModel.findOne({ email: email });
-    console.log("=======");
-    console.log(user);
     req.session.currentUser = user;
-    console.log(req.session.currentUser);
     if (!user) {
       const error = new Error("user with this email not found!");
       error.statusCode = 401;
       throw error;
     }
-    loadedUser = user;
     
     const comparePassword = await bcrypt.compare(password, user.password);
 
@@ -60,28 +55,14 @@ exports.postLogin = async (req, res, next) => {
       error.statusCode = 401;
       throw error;
     }
-    const token = jwt.sign({ email: loadedUser.email }, "expressnuxtsecret", {
+    const token = jwt.sign({ email: user.email }, "expressnuxtsecret", {
       expiresIn: "50m",
     });
-    res.status(200).json({ token, user: {
-      id: loadedUser._id,
-      name: loadedUser.name,
-      email: loadedUser.email
-    } });
+    res.status(200).json({ token, user });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
     }
     next(err);
   }
-};
-
-exports.getUser = (req, res, next) => {
-  res.status(200).json({
-    user: {
-      id: loadedUser._id,
-      name: loadedUser.name,
-      email: loadedUser.email,
-    },
-  });
 };

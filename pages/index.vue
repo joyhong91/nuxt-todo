@@ -6,9 +6,6 @@
     <todo-list-dialog />
   </div>
 </template>
-<script>
-export default {
-  middleware: ['auth']
-}
-</script>
+
+
 
