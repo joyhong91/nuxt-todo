@@ -91,9 +91,10 @@ export const mutations = {
     },
     updateTodo(state, todoData) {
         const todoObj = state.todo;
-        const todoItem = todoObj.items.find(item => item._id === todoData.todoId);
+        const todoItem = todoObj.items.find(item => item._id === todoData._id);
 
         todoItem.title = todoData.title;
+        todoItem.startAt = todoData.startAt;
     },
     updateIsDone(state, todoData) {
         const todoObj = state.todo;
