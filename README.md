@@ -1,4 +1,15 @@
-# nuxt-test-auth
+
+# TODO for 66days
+
+흔하디 흔한 TODO app이지만, 극J 성향인 저 포함 여러 사람들에게 흔한만큼 없어서는 안될 습관 관리 툴 입니다.
+
+나를 위한 좋은 습관을 만들고 작은거 하나하나 부터 체크하며 행하게 되면 몸이 습관에 적응할 때까지 21일.. 몸에 베이기 까지 66일이 걸린다고 합니다. 
+
+'뭐부터해야하지..' 하며 시작이 어려울 수 있습니다.   커대란 계획보다는 당장 앞 사소한 계획부터 실행하게 되면서 성취감과 자신감이 올라가게 됩니다. 
+
+각 `MODEL`기반 CRUD 기능입니다. (부가적인 기능은 아직 작업 중입니다.)
+
+
 
 ## Build Setup
 
@@ -17,53 +28,50 @@ $ npm run start
 $ npm run generate
 ```
 
-For detailed explanation on how things work, check out the [documentation](https://nuxtjs.org).
-
-## Special Directories
-
-You can create the following extra directories, some of which have special behaviors. Only `pages` is required; you can delete them if you don't want to use their functionality.
-
-### `assets`
-
-The assets directory contains your uncompiled assets such as Stylus or Sass files, images, or fonts.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/assets).
-
-### `components`
-
-The components directory contains your Vue.js components. Components make up the different parts of your page and can be reused and imported into your pages, layouts and even other components.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/components).
-
-### `layouts`
-
-Layouts are a great help when you want to change the look and feel of your Nuxt app, whether you want to include a sidebar or have distinct layouts for mobile and desktop.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/layouts).
 
 
-### `pages`
+## Setting
+`Nuxt(SSR)`, `express.js`, `mongoDB(mongoose)`, `javascript` 
 
-This directory contains your application views and routes. Nuxt will read all the `*.vue` files inside this directory and setup Vue Router automatically.
+경험 협업툴: `slack` `jira` |
+디자인 협업툴: `Sketch` `Invision` 
 
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/get-started/routing).
+## /api 
+### Models
+`User`: name, email, password
 
-### `plugins`
+`Todo`: userId(ref: user), title, startAt, isDone
 
-The plugins directory contains JavaScript plugins that you want to run before instantiating the root Vue.js Application. This is the place to add Vue plugins and to inject functions or constants. Every time you need to use `Vue.use()`, you should create a file in `plugins/` and add its path to plugins in `nuxt.config.js`.
+`Point`: userId(ref: user), todoIds, amount
 
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/plugins).
+### Routers
+`User`: 로그인, 회원가입
 
-### `static`
+`Todo`: /addTodo /getTodosByUserId, /updateIsDone, /updateTodo, /deleteTodoById, /deleteMany
 
-This directory contains your static files. Each file inside this directory is mapped to `/`.
+`Point` /createPoint, /getPointByUserId, /updatePoint, /resetPoint
 
-Example: `/static/robots.txt` is mapped as `/robots.txt`.
+###  functions
+- 로그인 or 회원가입(회원가입 후 로그인)
+- header carousel(dot, nav :false)
+- todo 입력 (시작일 지정)
+    - row를 클릭하면 완료 처리 (완료 서브 탭에서도 확인가능)
+    - 완료, 미완료 처리시 진행률 dashboard
+    - 완료 처리시 point는 2p씩 증가 
+    - 완료된 row를 다시 클릭하면 todo로 (point는 -2p)
+    - ** Todo, Done 서브 탭은 시작 날짜가 오늘 이상인 유효한 것들만 로딩 (all 서브탭에서는 다 확인 가능 단,유효하지 않은 것들은 disabled)
+    - Todo 수정
+    - Todo 삭제 
+    
 
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/static).
 
-### `store`
 
-This directory contains your Vuex store files. Creating a file in this directory automatically activates Vuex.
 
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/store).
+## Components
+auth > login, register
+
+
+Todo>dashboard, input, list
+
+footer>
+
