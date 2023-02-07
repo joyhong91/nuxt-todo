@@ -170,6 +170,7 @@ header.v-sheet.theme--dark.v-toolbar {
 body .theme--dark.v-application {
     background:url('https://as2.ftcdn.net/v2/jpg/04/02/75/71/1000_F_402757116_5ptVjBNXuMqgBldH2LPtmiAAgRvWS8RN.jpg') rgba(0,0,0,0.7)  no-repeat fixed;
     background-size: cover;
+    background-position-y: bottom;
     
     .v-application--wrap {
         background-color: rgba(0,0,0,0.6);
