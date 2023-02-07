@@ -13,7 +13,7 @@
                     ALL
                 </v-btn>
             </v-toolbar-title>
-            <v-btn class="btn-deleteAll mr-4" @click="deleteTodoAll" outlined absolute>
+            <v-btn v-if="this.allBtnActive" class="btn-deleteAll mr-4" @click="deleteTodoAll" outlined absolute>
                 <v-icon left>
                     mdi-delete
                 </v-icon>
