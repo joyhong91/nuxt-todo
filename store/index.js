@@ -18,7 +18,7 @@ export const state = () => ({
 
 export const getters = {
     isLoggined(state) {
-        return state.currentUser; // auth object as default will be added in vuex state, when you initialize nuxt auth
+        return state.auth.loggedIn; // auth object as default will be added in vuex state, when you initialize nuxt auth
     },
     getCurrentUser(state) {
         return state.currentUser;
@@ -136,7 +136,7 @@ export const mutations = {
 //actions 비동기 로직 
 export const actions = {
     nuxtServerInit({ commit }, { req }) {
-        if (req?.session?.currentUser) {
+        if (this.state.auth.loggedIn) {
             commit('setCurrentUser', req?.session?.currentUser);
         }
     },
@@ -212,7 +212,7 @@ export const actions = {
         
     },
 
-    DELETE_TODO_ALL({ commit }) {
+    async DELETE_TODO_ALL({ commit }) {
         if (!confirm(this.$ALERT_MESSAGES().DELETEALL)) {
             return false;
         }
@@ -222,9 +222,8 @@ export const actions = {
             ids.push(item._id);
         })
 
-        this.$axios.$delete("/deleteMany", {
-            params: { ids }
-        });
+        await this.$axios.$delete("/deleteMany", {params: {ids}});
+        await this.$axios.patch('/resetPoint', {pointId: this.getters.getPoint._id});
 
         commit('deleteAll');
         commit('setTodoItemsPagination');

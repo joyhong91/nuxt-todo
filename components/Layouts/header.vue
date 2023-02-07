@@ -1,7 +1,6 @@
 <template>
     <div>
-        <v-toolbar prominent
-            src="https://images.unsplash.com/photo-1589830258006-f91b5cb1eab5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2828&q=80">
+        <v-toolbar prominent>
             <v-list-item-icon @click.stop="drawer = !drawer">
                 <!-- <v-icon aria-hidden="false" dark>mdi-account</v-icon> -->
                 <v-app-bar-nav-icon></v-app-bar-nav-icon>
@@ -27,7 +26,7 @@
 
                 <v-list-item-content>
                     <v-list-item-title v-if="isLoggined">
-                        {{ this.$store.state.currentUser.email }}
+                        {{ getCurrentUser?.email }}
                     </v-list-item-title>
                     <v-list-item-title v-else>
                         Guest
@@ -106,12 +105,11 @@ export default {
         async logout() {
             await this.$auth.logout();
             this.$store.commit('setEmptyCurrentUser');
-            this.$router.push("/auth/login");
 
         }
     },
     computed: {
-        ...mapGetters(['isLoggined', 'getPoint'])
+        ...mapGetters(['isLoggined', 'getPoint', 'getCurrentUser'])
     }
 };
 </script>

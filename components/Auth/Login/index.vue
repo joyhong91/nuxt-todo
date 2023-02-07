@@ -75,7 +75,7 @@
           const response = await this.$auth.loginWith("local", {data});
 
           this.$store.commit('setCurrentUser', response.data.user);
-          await this.$router.push('/');
+          this.$router.push('/');
   
         } catch (err) {
           this.errorMsg = this.$ERROR().LOGIN;

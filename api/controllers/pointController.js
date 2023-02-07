@@ -60,3 +60,20 @@ exports.updatePoint = async (req, res, next) => {
         next(err);
     }
 };
+
+exports.resetPoint = async (req, res, next) => {
+    let { pointId } = req.body;
+    
+    try {
+        const point = await pointModel.findByIdAndUpdate(pointId, {$set: {todoIds: [], amount: 0}});
+        
+        res.status(200).json({
+            point
+        });
+    } catch (err) {
+        if (!err.statusCode) {
+            err.statusCode = 500;
+        }
+        next(err);
+    }
+};
