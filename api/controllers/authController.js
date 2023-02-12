@@ -2,8 +2,9 @@ const bcrypt = require("bcryptjs");
 const userModel = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 
-exports.postSignin = async (req, res, next) => {
+exports.postSignUp = async (req, res, next) => {
   const { name, email, password } = req.body;
+  
   try {
     const existUser = await userModel.findOne({ email: email });
     if (existUser) {

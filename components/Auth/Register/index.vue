@@ -73,7 +73,7 @@ export default {
     async register() {
       try {
         if (this.checkFormValidate()) {
-          const user = await this.$axios.$post("/api/auth/signin", {
+          const user = await this.$axios.$post("/api/auth/signUp", {
             name: this.name,
             email: this.email,
             password: this.password
@@ -98,7 +98,6 @@ export default {
       this.password = '';
     }
   },
-
 };
 </script>
 
