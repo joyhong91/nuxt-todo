@@ -50,9 +50,6 @@ export default {
       }
     }
   },
-  router: {
-    middleware: 'auth'
-  },
   axios: {
     baseURL: development? 'http://localhost:3000': 'https://joyhong9102.netlify.app',
   },
